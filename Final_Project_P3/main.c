@@ -11,6 +11,7 @@
 #include "FileReader.h"
 #include "Table.h"
 
+
 int main(int argc, const char * argv[])
 {
 	char *fileName = "a.txt";
@@ -22,6 +23,17 @@ int main(int argc, const char * argv[])
 	PrintTable(table, output);
 	
 	fclose(output);
+	
+	Vector v = GetFreePositions(table);
+	
+	for (int i = 0; i < v.count; i++)
+	{
+		printf("%d ", table.grid[v.values[i]]);
+	}
+	
+	printf("\n");
+	
+		//DisposeVector(v);
 
     return 0;	
 }

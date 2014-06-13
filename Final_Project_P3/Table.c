@@ -11,6 +11,29 @@
 
 #include "Table.h"
 #include "Parser.h"
+#include "Vector.h"
+
+
+
+Vector GetFreePositions(Table table)
+{
+	Vector vector = GetVector(table.dimensions * table.dimensions);
+	
+	for (int i = 0; i < table.dimensions; i++)
+	{
+		for (int j = 0; j < table.dimensions; j++)
+		{
+			int k = Index(i,j);
+			
+			if (table.grid[k] == 0)
+			{
+				vector.values[vector.count++] = k;
+			}
+		}
+	}
+	
+	return vector;
+}
 
 
 void Print(void *value, char *format , FILE *file)

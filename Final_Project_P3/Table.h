@@ -9,6 +9,8 @@
 #ifndef Final_Project_P3_Table_h
 #define Final_Project_P3_Table_h
 
+#include "Vector.h"
+
 #define Index(dim, row, column) dim * row + column
 
 typedef struct _Table
@@ -19,6 +21,12 @@ typedef struct _Table
 	int **grid;
 	
 } Table;
+
+
+
+Vector GetFreePositions(Table table);
+
+
 
 //
 // Print to the file decriptor.
