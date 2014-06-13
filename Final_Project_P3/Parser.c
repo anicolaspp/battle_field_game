@@ -13,12 +13,98 @@
 
 #include "Parser.h"
 
-int n, m;
+int _dimesion, _numberOfPlayers;
 int readingIndex = 0;
 
-char **GetLines(char *);
-void CleanCurrentValue(char *);
+int _hasBeenInit = 0;
+
+int **grid;
+
 int ReadDimensions();
+char *GetNextLine(char *);
+void PrintGrid(int **);
+
+
+
+int **ParseInputText(char *input)
+{
+	char *line = GetNextLine(input);
+	
+	if (!ReadDimensions(line))
+	{
+		return 0;
+	}
+	
+	grid = malloc(sizeof(int) * _dimesion * _dimesion);
+	
+	for (int i = 0; i < _dimesion; i++)
+	{
+		free(line);
+		line = GetNextLine(input);
+		
+		if (strlen(line) <= 0)
+		{
+				//error the input has an incorrect format
+		}
+		
+		int *numbers = malloc(sizeof(int) * 10000);
+		
+		int count = GetNumbersInLine(line, numbers);
+		
+		if (count != _dimesion)
+		{
+				//error the input has an incorrect format
+		}
+		
+		for (int j = 0; j < _dimesion; j++)
+		{
+			int k = Index(i, j);
+			
+			grid[k]  = numbers[j];
+			
+				//	printf("%d ", numbers[j]);
+			
+				//printf("%d ", grid[Index(i, j)]);
+		}
+		
+			//	printf("\n");
+		
+			//free(numbers);
+	}
+
+	_hasBeenInit = 1;
+	
+		//PrintGrid(grid);
+	
+	
+	return grid;
+	
+}
+
+int GetDimensions()
+{
+	return _dimesion;
+}
+
+int GetNumberOfPlayers()
+{
+	return _numberOfPlayers;
+}
+
+int HasTableBeenInitialized()
+{
+	return _hasBeenInit;
+}
+
+int **GetGrid()
+{
+	if (HasTableBeenInitialized())
+	{
+		return grid;
+	}
+	
+	return NULL;
+}
 
 int GetNumbersInLine(char *line, int *numbers)
 {
@@ -68,8 +154,8 @@ int ReadDimensions(char *line)
 		return 0;
 	}
 	
-	n = numbers[0];
-	m = numbers[1];
+	_dimesion = numbers[0];
+	_numberOfPlayers = numbers[1];
 	
 	free(numbers);
 		
@@ -108,126 +194,22 @@ char *GetNextLine(char * input)
 		readingIndex++;
 	}
 	
-	return "";
+	return result;
 }
 
-
-int **ParseInputText(char *input)
+void PrintGrid(int **grid)
 {
-	char *line = GetNextLine(input);
-	
-	if (!ReadDimensions(line))
+	for (int i = 0; i < GetDimensions(); i++)
 	{
-		return 0;
-	}
-
-	int **grid = malloc(sizeof(int) * n * n);
-	
-	for (int i = 0; i < n; i++)
-	{
-		free(line);
-		line = GetNextLine(input);
-		
-		if (strlen(line) <= 0)
+		for (int j = 0; j < GetDimensions(); j ++)
 		{
-			//error the input has an incorrect format
-		}
-		
-		int *numbers = malloc(sizeof(int) * 10000);
-		
-		int count = GetNumbersInLine(line, numbers);
-		
-		if (count != m)
-		{
-			//error the input has an incorrect format
-		}
-		
-		for (int j = 0; j < n; j++)
-		{
-			grid[(i * n) + j]  = numbers[j];
-			
-			printf("%d ", grid[(i * n) + j]);
+			printf("%d ", grid[Index(i, j)]);
 		}
 		
 		printf("\n");
 	}
-	
-
-	
-	return grid;
-
-	
-//	char **lines = GetLines(input);
-//	
-//	char *header = lines[0];
-//	
-//		//int n,m;
-//	
-//	char currentValue[3];
-//	int vIndex = 0;
-//	
-//	for (int i = 0; i < strlen(header); i++)
-//	{
-//		if (header[i] == '\n')
-//		{
-//			m = atoi(currentValue);
-//			CleanCurrentValue(currentValue);
-//			vIndex = 0;
-//		}
-//		else if (isspace(header[i]))
-//		{
-//			n = atoi(currentValue);
-//			CleanCurrentValue(currentValue);
-//			vIndex = 0;
-//		}
-//		else
-//		{
-//			currentValue[vIndex++] = header[i];
-//		}
-//	}
-//	
-//	int **grid = malloc(sizeof(int) * m * n);
-//	
-//	for (int i = 1; i < n; i++)
-//	{
-//		char *currentLine = lines[i];
-//		
-//		int columnIndex = 0;
-//		
-//		for (int j = 0; j < strlen(currentLine); j++)
-//		{
-//			if (isspace(currentLine[j]))
-//			{
-//				grid[i, columnIndex++] = atoi(currentValue);
-//				CleanCurrentValue(currentValue);
-//				vIndex = 0;
-//			}
-//			else
-//			{
-//				currentValue[vIndex++] = currentValue[j];
-//			}
-//		}
-//	}
-//	
-//	return grid;
 }
 
-char **GetLines(char *txt)
-{
-	char **result = malloc(sizeof(char) * strlen(txt));
-	
-	int index = 0;
-	
-	while (txt[index] != '\n')
-	{
-		
-	}
-	
-	return 0;
-}
-
-void CleanCurrentValue(char *value)
-{}
 
 
 

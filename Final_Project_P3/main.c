@@ -16,6 +16,19 @@ int main(int argc, const char * argv[])
 	
 	int **parsedData = ParseInputText(input);
 	
+	if (HasTableBeenInitialized())
+	{
+		for (int i = 0; i < GetDimensions(); i++)
+		{
+			for (int j = 0 ; j < GetDimensions(); j++)
+			{
+				printf("%d ",parsedData[Index(i, j)]);
+			}
+			
+			printf("\n");
+		}
+	}
+	
 	// insert code here...
 	printf("Hello, World!\n");
     return 0;

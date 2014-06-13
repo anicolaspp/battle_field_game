@@ -9,6 +9,16 @@
 #ifndef Final_Project_P3_Parser_h
 #define Final_Project_P3_Parser_h
 
+#define Index(row, column) GetDimensions() * row + column
+
 int **ParseInputText(char *input);
+
+int GetDimensions();
+
+int GetNumberOfPlayers();
+
+int HasTableBeenInitialized();
+
+int **GetGrid();
 
 #endif
