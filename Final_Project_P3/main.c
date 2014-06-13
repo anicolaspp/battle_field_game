@@ -15,27 +15,11 @@ int main(int argc, const char * argv[])
 {
 	char *fileName = "a.txt";
 	
-	Table table = ReadTableFromFile(fileName);
+	Table  table = ReadTableFromFile(fileName);
 	
-	if (table.dimensions > 0)
-	{
-		for (int i = 0; i < table.dimensions; i++)
-		{
-			for (int j = 0 ; j < table.dimensions; j++)
-			{
-				printf("%d ", table.grid[Index(table.dimensions , i, j)]);
-			}
-			
-			printf("\n");
-		}
-	}
-	
-	Dispose(table);
-	
-	// insert code here...
-	printf("Hello, World!\n");
+	PrintTable(table);
+
     return 0;
-	
 	
 }
 

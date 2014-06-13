@@ -10,12 +10,33 @@
 #include <stdlib.h>
 
 #include "Table.h"
+#include "Parser.h"
 
 
-void Dispose(Table table)
+void PrintTable(Table table)
 {
-	if (table.dimensions > 0)
+	for (int i = 0; i < table.dimensions; i++)
 	{
-		free(table.grid);
+		for (int j = 0; j < table.dimensions; j++)
+		{
+			int k = Index(i,j);
+			
+			int v = table.grid[k];
+			
+			printf("%d ", v);
+		}
+		
+		printf("\n");
 	}
+}
+
+void Dispose(Table * table)
+{
+	if (table->dimensions > 0)
+	{
+		free(table->grid);
+	}
+	
+		//memset(table, 0, sizeof(table));
+	free(table);
 }

@@ -11,7 +11,7 @@
 
 #define Index(dim, row, column) dim * row + column
 
-typedef struct
+typedef struct _Table
 {
 	int dimensions;
 	int numberOfPlayers;
@@ -20,7 +20,8 @@ typedef struct
 	
 } Table;
 
+void PrintTable(Table  table);
 
-void Dispose(Table table);
+void Dispose(Table *table);
 
 #endif

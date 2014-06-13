@@ -19,7 +19,7 @@ char * ReadFileContent(FILE *fileHandler);
 
 
 
-Table ReadTableFromFile(char *fileName)
+Table  ReadTableFromFile(char *fileName)
 {
 	Table table;
 	
@@ -42,7 +42,10 @@ Table ReadTableFromFile(char *fileName)
 	{
 		return table;
 	}
-	
+//	
+//	int a = sizeof(Table);
+//	table = (Table *)malloc(a);
+//	
 	table.grid = grid;
 	table.dimensions = GetDimensions();
 	table.numberOfPlayers = GetNumberOfPlayers();

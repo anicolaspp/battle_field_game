@@ -61,13 +61,7 @@ int **ParseInputText(char *input)
 			int k = Index(i, j);
 			
 			grid[k]  = numbers[j];
-			
-				//	printf("%d ", numbers[j]);
-			
-				//printf("%d ", grid[Index(i, j)]);
 		}
-		
-			//	printf("\n");
 		
 			//free(numbers);
 	}
