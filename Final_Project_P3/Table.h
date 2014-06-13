@@ -27,7 +27,6 @@ typedef struct _Table
 Vector GetFreePositions(Table table);
 
 
-
 //
 // Print to the file decriptor.
 // If the file is NULL it will print to stdout

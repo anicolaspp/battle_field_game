@@ -12,6 +12,7 @@
 #include "Table.h"
 
 
+
 int main(int argc, const char * argv[])
 {
 	char *fileName = "a.txt";
@@ -33,7 +34,7 @@ int main(int argc, const char * argv[])
 	
 	printf("\n");
 	
-		//DisposeVector(v);
+
 
     return 0;	
 }

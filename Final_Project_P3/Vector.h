@@ -16,7 +16,7 @@ typedef struct _Vector
 {
 	int *values;
 	int count;
-	
+	int capacity;
 	
 } Vector;
 
@@ -25,6 +25,6 @@ void Add(Vector vector, int value);
 
 Vector GetVector(int size);
 
-DisposeVector(Vector v);
+void DisposeVector(Vector v);
 
 #endif

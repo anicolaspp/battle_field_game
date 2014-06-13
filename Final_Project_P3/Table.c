@@ -35,7 +35,6 @@ Vector GetFreePositions(Table table)
 	return vector;
 }
 
-
 void Print(void *value, char *format , FILE *file)
 {
 	if (file == NULL)

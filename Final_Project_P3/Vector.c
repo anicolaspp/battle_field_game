@@ -15,6 +15,7 @@ Vector GetVector(int size)
 {
 	Vector v;
 	v.values = malloc(sizeof(int) * size);
+	v.capacity = size;
 	v.count = 0;
 	
 	return v;
