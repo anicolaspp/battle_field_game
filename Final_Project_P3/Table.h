@@ -20,7 +20,7 @@ typedef struct _Table
 	
 } Table;
 
-void PrintTable(Table  table);
+void PrintTable(Table table, FILE *outputFile);
 
 void Dispose(Table *table);
 

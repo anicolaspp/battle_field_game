@@ -42,10 +42,7 @@ Table  ReadTableFromFile(char *fileName)
 	{
 		return table;
 	}
-//	
-//	int a = sizeof(Table);
-//	table = (Table *)malloc(a);
-//	
+
 	table.grid = grid;
 	table.dimensions = GetDimensions();
 	table.numberOfPlayers = GetNumberOfPlayers();
@@ -55,7 +52,12 @@ Table  ReadTableFromFile(char *fileName)
 
 void WriteTableToFile(Table *table, char *fileName)
 {
+	FILE *fileHandler = fopen(fileName, "w");
 	
+	if (fileHandler != NULL)
+	{
+		
+	}
 }
 
 

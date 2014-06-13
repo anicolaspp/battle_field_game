@@ -13,7 +13,19 @@
 #include "Parser.h"
 
 
-void PrintTable(Table table)
+void Print(void *value, char *format , FILE *file)
+{
+	if (file == NULL)
+	{
+		printf(format, value);
+	}
+	else
+	{
+		fprintf(file, format, value);
+	}
+}
+
+void PrintTable(Table table, FILE *outputFile)
 {
 	for (int i = 0; i < table.dimensions; i++)
 	{
@@ -23,10 +35,11 @@ void PrintTable(Table table)
 			
 			int v = table.grid[k];
 			
-			printf("%d ", v);
+			Print(v, "%d ", outputFile);
+			
 		}
 		
-		printf("\n");
+		Print("\n", "%s", outputFile);
 	}
 }
 
@@ -40,3 +53,4 @@ void Dispose(Table * table)
 		//memset(table, 0, sizeof(table));
 	free(table);
 }
+

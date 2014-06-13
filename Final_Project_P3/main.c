@@ -15,9 +15,13 @@ int main(int argc, const char * argv[])
 {
 	char *fileName = "a.txt";
 	
-	Table  table = ReadTableFromFile(fileName);
+	Table table = ReadTableFromFile(fileName);
 	
-	PrintTable(table);
+	FILE *output =  fopen("b.txt", "w");
+	
+	PrintTable(table, output);
+	
+	fclose(output);
 
     return 0;
 	
