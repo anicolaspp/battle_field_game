@@ -10,6 +10,8 @@
 		0842649A194B292D0049858B /* FileReader.c in Sources */ = {isa = PBXBuildFile; fileRef = 08426499194B292D0049858B /* FileReader.c */; };
 		0842649D194B4EC40049858B /* Table.c in Sources */ = {isa = PBXBuildFile; fileRef = 0842649C194B4EC40049858B /* Table.c */; };
 		084264A0194B87F50049858B /* Vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 0842649F194B87F50049858B /* Vector.c */; };
+		084264A5194B8F370049858B /* SingleMoveStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = 084264A4194B8F370049858B /* SingleMoveStrategy.c */; };
+		084264A7194B8FB80049858B /* RandomMoveStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = 084264A6194B8FB80049858B /* RandomMoveStrategy.c */; };
 		08D56BBC194A56A200C3A72C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08D56BBB194A56A200C3A72C /* main.c */; };
 		08D56BBE194A56A200C3A72C /* Final_Project_P3.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */; };
 		08D56BC6194A575000C3A72C /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 08D56BC5194A575000C3A72C /* Parser.c */; };
@@ -38,6 +40,8 @@
 		084264A1194B8DFF0049858B /* SingleMoveStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleMoveStrategy.h; sourceTree = "<group>"; };
 		084264A2194B8E660049858B /* RandomMoveStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RandomMoveStrategy.h; sourceTree = "<group>"; };
 		084264A3194B8EDA0049858B /* OptimazerStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptimazerStrategy.h; sourceTree = "<group>"; };
+		084264A4194B8F370049858B /* SingleMoveStrategy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SingleMoveStrategy.c; sourceTree = "<group>"; };
+		084264A6194B8FB80049858B /* RandomMoveStrategy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RandomMoveStrategy.c; sourceTree = "<group>"; };
 		08D56BB8194A56A200C3A72C /* Final_Project_P3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Final_Project_P3; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D56BBB194A56A200C3A72C /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Final_Project_P3.1; sourceTree = "<group>"; };
@@ -75,19 +79,21 @@
 		08D56BBA194A56A200C3A72C /* Final_Project_P3 */ = {
 			isa = PBXGroup;
 			children = (
-				08D56BBB194A56A200C3A72C /* main.c */,
-				08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */,
-				08D56BC4194A56F500C3A72C /* Parser.h */,
-				08D56BC5194A575000C3A72C /* Parser.c */,
-				08426498194ABDDF0049858B /* FileReader.h */,
 				08426499194B292D0049858B /* FileReader.c */,
-				0842649B194B4E860049858B /* Table.h */,
-				0842649C194B4EC40049858B /* Table.c */,
-				0842649E194B84C50049858B /* Vector.h */,
-				0842649F194B87F50049858B /* Vector.c */,
-				084264A1194B8DFF0049858B /* SingleMoveStrategy.h */,
-				084264A2194B8E660049858B /* RandomMoveStrategy.h */,
+				08426498194ABDDF0049858B /* FileReader.h */,
+				08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */,
+				08D56BBB194A56A200C3A72C /* main.c */,
 				084264A3194B8EDA0049858B /* OptimazerStrategy.h */,
+				08D56BC5194A575000C3A72C /* Parser.c */,
+				08D56BC4194A56F500C3A72C /* Parser.h */,
+				084264A6194B8FB80049858B /* RandomMoveStrategy.c */,
+				084264A2194B8E660049858B /* RandomMoveStrategy.h */,
+				084264A4194B8F370049858B /* SingleMoveStrategy.c */,
+				084264A1194B8DFF0049858B /* SingleMoveStrategy.h */,
+				0842649C194B4EC40049858B /* Table.c */,
+				0842649B194B4E860049858B /* Table.h */,
+				0842649F194B87F50049858B /* Vector.c */,
+				0842649E194B84C50049858B /* Vector.h */,
 			);
 			path = Final_Project_P3;
 			sourceTree = "<group>";
@@ -145,7 +151,9 @@
 			files = (
 				0842649D194B4EC40049858B /* Table.c in Sources */,
 				0842649A194B292D0049858B /* FileReader.c in Sources */,
+				084264A7194B8FB80049858B /* RandomMoveStrategy.c in Sources */,
 				08D56BC6194A575000C3A72C /* Parser.c in Sources */,
+				084264A5194B8F370049858B /* SingleMoveStrategy.c in Sources */,
 				08D56BBC194A56A200C3A72C /* main.c in Sources */,
 				084264A0194B87F50049858B /* Vector.c in Sources */,
 			);
