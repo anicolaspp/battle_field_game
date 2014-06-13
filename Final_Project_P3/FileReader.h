@@ -19,7 +19,7 @@ typedef struct
 	
 } Table;
 
-Table * ReadTableFromFile(char *fileName);
+Table  ReadTableFromFile(char *fileName);
 
 void WriteTableToFile(Table *table, char *fileName);
 

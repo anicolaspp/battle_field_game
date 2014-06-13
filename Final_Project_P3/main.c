@@ -7,10 +7,16 @@
 //
 
 #include <stdio.h>
+
 #include "Parser.h"
+#include "FileReader.h"
 
 int main(int argc, const char * argv[])
 {
+	
+	char *fileName = "a.txt";
+	Table table = ReadTableFromFile(fileName);
+	
 
 	char * input = "3 3\n1 2 0\n0 2 0\n3 0 0";
 	
