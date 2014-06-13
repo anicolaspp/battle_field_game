@@ -26,6 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		08426498194ABDDF0049858B /* FileReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileReader.h; sourceTree = "<group>"; };
 		08D56BB8194A56A200C3A72C /* Final_Project_P3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Final_Project_P3; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D56BBB194A56A200C3A72C /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Final_Project_P3.1; sourceTree = "<group>"; };
@@ -67,6 +68,7 @@
 				08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */,
 				08D56BC4194A56F500C3A72C /* Parser.h */,
 				08D56BC5194A575000C3A72C /* Parser.c */,
+				08426498194ABDDF0049858B /* FileReader.h */,
 			);
 			path = Final_Project_P3;
 			sourceTree = "<group>";
@@ -233,6 +235,7 @@
 				08D56BC3194A56A200C3A72C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
