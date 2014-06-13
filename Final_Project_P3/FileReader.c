@@ -34,7 +34,7 @@ Table ReadTableFromFile(char *fileName)
 	
 	fclose(fileHandler);
 	
-	// I will need the FORMATTER here!!!
+	// I will need the JSON FORMATTER here!!!
 	
 	int **grid = ParseInputText(dataString);
 	

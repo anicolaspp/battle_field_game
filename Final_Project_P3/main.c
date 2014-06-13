@@ -8,32 +8,29 @@
 
 #include <stdio.h>
 
-#include "Parser.h"
 #include "FileReader.h"
+#include "Table.h"
 
 int main(int argc, const char * argv[])
 {
-	
 	char *fileName = "a.txt";
+	
 	Table table = ReadTableFromFile(fileName);
 	
-
-	char * input = "3 3\n1 2 0\n0 2 0\n3 0 0";
-	
-	int **parsedData = ParseInputText(input);
-	
-	if (HasTableBeenInitialized())
+	if (table.dimensions > 0)
 	{
-		for (int i = 0; i < GetDimensions(); i++)
+		for (int i = 0; i < table.dimensions; i++)
 		{
-			for (int j = 0 ; j < GetDimensions(); j++)
+			for (int j = 0 ; j < table.dimensions; j++)
 			{
-				printf("%d ",parsedData[Index(i, j)]);
+				printf("%d ", table.grid[Index(i, j)]);
 			}
 			
 			printf("\n");
 		}
 	}
+	
+	Dispose(table);
 	
 	// insert code here...
 	printf("Hello, World!\n");

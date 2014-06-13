@@ -9,17 +9,10 @@
 #ifndef Final_Project_P3_FileReader_h
 #define Final_Project_P3_FileReader_h
 
+#include "Table.h"
 
-typedef struct
-{
-	int dimensions;
-	int numberOfPlayers;
-	
-	int **grid;
-	
-} Table;
 
-Table  ReadTableFromFile(char *fileName);
+Table ReadTableFromFile(char *fileName);
 
 void WriteTableToFile(Table *table, char *fileName);
 
