@@ -21,7 +21,7 @@ int main(int argc, const char * argv[])
 	
 	FILE *output =  fopen("b.txt", "w");
 	
-	PrintTable(table, output);
+	PrintTable(table, NULL);
 	
 	fclose(output);
 	
