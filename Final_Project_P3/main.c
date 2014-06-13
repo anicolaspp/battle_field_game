@@ -7,12 +7,19 @@
 //
 
 #include <stdio.h>
+#include "Parser.h"
 
 int main(int argc, const char * argv[])
 {
 
+	char * input = "3 3\n1 2 0\n0 2 0\n3 0 0";
+	
+	int **parsedData = ParseInputText(input);
+	
 	// insert code here...
 	printf("Hello, World!\n");
     return 0;
+	
+	
 }
 
