@@ -9,7 +9,7 @@
 #ifndef Final_Project_P3_Table_h
 #define Final_Project_P3_Table_h
 
-#define Index(row, column) GetDimensions() * row + column
+#define Index(dim, row, column) dim * row + column
 
 typedef struct
 {
@@ -19,6 +19,7 @@ typedef struct
 	int **grid;
 	
 } Table;
+
 
 void Dispose(Table table);
 

@@ -23,7 +23,7 @@ int main(int argc, const char * argv[])
 		{
 			for (int j = 0 ; j < table.dimensions; j++)
 			{
-				printf("%d ", table.grid[Index(i, j)]);
+				printf("%d ", table.grid[Index(table.dimensions , i, j)]);
 			}
 			
 			printf("\n");
