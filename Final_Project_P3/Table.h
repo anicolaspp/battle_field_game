@@ -20,8 +20,15 @@ typedef struct _Table
 	
 } Table;
 
+//
+// Print to the file decriptor.
+// If the file is NULL it will print to stdout
+//
 void PrintTable(Table table, FILE *outputFile);
 
+//
+//	Releases allocated resourses
+//
 void Dispose(Table *table);
 
 #endif

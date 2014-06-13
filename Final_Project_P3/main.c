@@ -23,7 +23,6 @@ int main(int argc, const char * argv[])
 	
 	fclose(output);
 
-    return 0;
-	
+    return 0;	
 }
 

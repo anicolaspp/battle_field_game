@@ -31,11 +31,7 @@ void PrintTable(Table table, FILE *outputFile)
 	{
 		for (int j = 0; j < table.dimensions; j++)
 		{
-			int k = Index(i,j);
-			
-			int v = table.grid[k];
-			
-			Print(v, "%d ", outputFile);
+			Print(table.grid[Index(i,j)], "%d ", outputFile);
 			
 		}
 		
