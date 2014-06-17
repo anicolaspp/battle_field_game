@@ -21,24 +21,27 @@ int main(int argc, const char * argv[])
 	
 	FILE *output =  fopen("b.txt", "w");
 	
-	PrintTable(table, NULL);
-	
-	fclose(output);
-	
-		//Vector *v = GetFreePositions(table);
-		Vector *v = GetXVector();
-
-	printf("\n");
-	
-	for (int i = 0; i < v->count; i++)
+	if (table != NULL)
 	{
-		printf("%d ", v->values[i]);
+		PrintTable(table, NULL);
+	
+		fclose(output);
+	
+			//Vector *v = GetFreePositions(table);
+			Vector *v = GetXVector();
+
+		printf("\n");
+	
+		for (int i = 0; i < v->count; i++)
+		{
+			printf("%d ", v->values[i]);
+		}
+	
+		printf("\n");
+	
+		free(v);
+		free(table);
 	}
-	
-	printf("\n");
-	
-	free(v);
-	free(table);
 	
     return 0;	
 }

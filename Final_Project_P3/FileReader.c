@@ -21,7 +21,7 @@ char * ReadFileContent(FILE *fileHandler);
 
 Table *ReadTableFromFile(char *fileName)
 {
-	Table *table = malloc(sizeof(Table));
+	Table *table = NULL;
 	
 	FILE *fileHandler = fopen(fileName, "r");
 	
@@ -36,12 +36,19 @@ Table *ReadTableFromFile(char *fileName)
 	
 	// I will need the JSON FORMATTER here!!!
 	
-	int **grid = ParseInputText(dataString);
+	int *grid = ParseInputText(dataString);
 	
 	if (grid == NULL)
 	{
+		free(dataString);
+		
 		return table;
 	}
+	
+	
+	free(dataString);
+	
+	table = malloc(sizeof(Table));
 
 	table->grid = grid;
 	table->dimensions = GetDimensions();
