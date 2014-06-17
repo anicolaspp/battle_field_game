@@ -22,9 +22,16 @@ typedef struct _Table
 	
 } Table;
 
+typedef struct _Point
+{
+	int X, Y;
+	
+} Point;
 
 
 Vector *GetFreePositions(Table table);
+
+Point InvertIndex(int index, Table *table);
 
 
 //

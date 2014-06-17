@@ -61,6 +61,15 @@ void PrintTable(Table *table, FILE *outputFile)
 	}
 }
 
+Point InvertIndex(int index, Table *table)
+{
+	Point point;
+	
+	// Computer here
+	
+	return point;
+}
+
 void Dispose(Table * table)
 {
 	if (table->dimensions > 0)
