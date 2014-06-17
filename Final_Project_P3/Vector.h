@@ -23,7 +23,7 @@ typedef struct _Vector
 
 void Add(Vector vector, int value);
 
-Vector GetVector(int size);
+Vector *GetVector(int size);
 
 void DisposeVector(Vector v);
 

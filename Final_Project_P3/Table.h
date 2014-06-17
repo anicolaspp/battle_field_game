@@ -18,20 +18,20 @@ typedef struct _Table
 	int dimensions;
 	int numberOfPlayers;
 	
-	int **grid;
+	int *grid;
 	
 } Table;
 
 
 
-Vector GetFreePositions(Table table);
+Vector *GetFreePositions(Table table);
 
 
 //
 // Print to the file decriptor.
 // If the file is NULL it will print to stdout
 //
-void PrintTable(Table table, FILE *outputFile);
+void PrintTable(Table *table, FILE *outputFile);
 
 //
 //	Releases allocated resourses

@@ -7,19 +7,22 @@
 //
 
 #include <stdio.h>
+#include <time.h>
 
 
 #include "RandomMoveStrategy.h"
 
 
 
-int RandomMoveStrategy_Play(Vector vector)
+int RandomMoveStrategy_Play(Vector *vector)
 {
-	if (vector.count > 0)
+	if (vector->count > 0)
 	{
 		// Need a random position here
 		
-		int position = 0;
+		srand((unsigned)time(NULL));
+		
+		int position = rand() % vector->count;
 		
 		return position;
 	}

@@ -19,9 +19,9 @@ char * ReadFileContent(FILE *fileHandler);
 
 
 
-Table  ReadTableFromFile(char *fileName)
+Table *ReadTableFromFile(char *fileName)
 {
-	Table table;
+	Table *table = malloc(sizeof(Table));
 	
 	FILE *fileHandler = fopen(fileName, "r");
 	
@@ -43,9 +43,9 @@ Table  ReadTableFromFile(char *fileName)
 		return table;
 	}
 
-	table.grid = grid;
-	table.dimensions = GetDimensions();
-	table.numberOfPlayers = GetNumberOfPlayers();
+	table->grid = grid;
+	table->dimensions = GetDimensions();
+	table->numberOfPlayers = GetNumberOfPlayers();
 	
 	return table;
 }

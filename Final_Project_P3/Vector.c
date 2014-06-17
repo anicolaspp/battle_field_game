@@ -11,12 +11,12 @@
 #include "Vector.h"
 
 
-Vector GetVector(int size)
+Vector *GetVector(int size)
 {
-	Vector v;
-	v.values = malloc(sizeof(int) * size);
-	v.capacity = size;
-	v.count = 0;
+	Vector *v = malloc(sizeof(Vector));
+	v->values = malloc(sizeof(int) * size);
+	v->capacity = size;
+	v->count = 0;
 	
 	return v;
 }

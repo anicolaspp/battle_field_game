@@ -11,11 +11,11 @@
 #include "SingleMoveStrategy.h"
 
 
-int SingleMoveStrategy_Play(Vector vector)
+int SingleMoveStrategy_Play(Vector *vector)
 {
-	if (vector.count > 0)
+	if (vector->count > 0)
 	{
-		return vector.values[0];
+		return vector->values[0];
 	}
 	
 	return -1;

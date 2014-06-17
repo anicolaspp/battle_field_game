@@ -12,21 +12,28 @@
 #include <ctype.h>
 
 #include "Parser.h"
+#include "Vector.h"
+
+Vector *_vector;
+
 
 int _dimesion, _numberOfPlayers;
 int readingIndex = 0;
 
 int _hasBeenInit = 0;
 
-int **grid;
+int *grid;
 
 int ReadDimensions();
 char *GetNextLine(char *);
 void PrintGrid(int **);
 
+Vector *GetXVector()
+{
+	return _vector;
+}
 
-
-int **ParseInputText(char *input)
+int *ParseInputText(char *input)
 {
 	char *line = GetNextLine(input);
 	
@@ -36,6 +43,7 @@ int **ParseInputText(char *input)
 	}
 	
 	grid = malloc(sizeof(int) * _dimesion * _dimesion);
+	_vector = GetVector(_dimesion * _dimesion);
 	
 	for (int i = 0; i < _dimesion; i++)
 	{
@@ -47,7 +55,7 @@ int **ParseInputText(char *input)
 				//error the input has an incorrect format
 		}
 		
-		int *numbers = malloc(sizeof(int) * 10000);
+		int *numbers = malloc(sizeof(int) * _dimesion);
 		
 		int count = GetNumbersInLine(line, numbers);
 		
@@ -61,11 +69,17 @@ int **ParseInputText(char *input)
 			int k = Index(i, j);
 			
 			grid[k]  = numbers[j];
+			
+			if (grid[k] == 0)
+			{
+				_vector->values[_vector->count++] = k;
+			}
 		}
 		
-			//free(numbers);
+		free(numbers);
 	}
 
+	free(line);
 	_hasBeenInit = 1;
 	
 		//PrintGrid(grid);

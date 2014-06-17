@@ -15,9 +15,9 @@
 
 
 
-Vector GetFreePositions(Table table)
+Vector *GetFreePositions(Table table)
 {
-	Vector vector = GetVector(table.dimensions * table.dimensions);
+	Vector *vector = GetVector(table.dimensions * table.dimensions);
 	
 	for (int i = 0; i < table.dimensions; i++)
 	{
@@ -27,7 +27,7 @@ Vector GetFreePositions(Table table)
 			
 			if (table.grid[k] == 0)
 			{
-				vector.values[vector.count++] = k;
+				vector->values[vector->count++] = k;
 			}
 		}
 	}
@@ -47,13 +47,13 @@ void Print(void *value, char *format , FILE *file)
 	}
 }
 
-void PrintTable(Table table, FILE *outputFile)
+void PrintTable(Table *table, FILE *outputFile)
 {
-	for (int i = 0; i < table.dimensions; i++)
+	for (int i = 0; i < table->dimensions; i++)
 	{
-		for (int j = 0; j < table.dimensions; j++)
+		for (int j = 0; j < table->dimensions; j++)
 		{
-			Print(table.grid[Index(i,j)], "%d ", outputFile);
+			Print(table->grid[Index(i,j)], "%d ", outputFile);
 			
 		}
 		

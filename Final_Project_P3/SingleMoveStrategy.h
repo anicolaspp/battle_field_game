@@ -11,6 +11,6 @@
 
 #include "Vector.h"
 
-int SingleMoveStrategy_Play(Vector vector);
+int SingleMoveStrategy_Play(Vector *vector);
 
 #endif

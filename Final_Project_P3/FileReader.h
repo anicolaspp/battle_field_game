@@ -12,7 +12,7 @@
 #include "Table.h"
 
 
-Table  ReadTableFromFile(char *fileName);
+Table *ReadTableFromFile(char *fileName);
 
 void WriteTableToFile(Table *table, char *fileName);
 

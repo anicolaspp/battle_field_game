@@ -11,7 +11,11 @@
 
 #define Index(row, column) GetDimensions() * row + column
 
-int **ParseInputText(char *input);
+#include "Vector.h"
+
+int *ParseInputText(char *input);
+
+Vector *GetXVector();
 
 int GetDimensions();
 

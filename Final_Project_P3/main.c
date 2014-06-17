@@ -7,17 +7,17 @@
 //
 
 #include <stdio.h>
+#include <Time.h>
 
 #include "FileReader.h"
 #include "Table.h"
-
-
+#include "Parser.h"
 
 int main(int argc, const char * argv[])
 {
 	char *fileName = "a.txt";
 	
-	Table table = ReadTableFromFile(fileName);
+	Table *table = ReadTableFromFile(fileName);
 	
 	FILE *output =  fopen("b.txt", "w");
 	
@@ -25,17 +25,21 @@ int main(int argc, const char * argv[])
 	
 	fclose(output);
 	
-	Vector v = GetFreePositions(table);
+		//Vector *v = GetFreePositions(table);
+		Vector *v = GetXVector();
+
+	printf("\n");
 	
-	for (int i = 0; i < v.count; i++)
+	for (int i = 0; i < v->count; i++)
 	{
-		printf("%d ", table.grid[v.values[i]]);
+		printf("%d ", v->values[i]);
 	}
 	
 	printf("\n");
 	
-
-
+	free(v);
+	free(table);
+	
     return 0;	
 }
 
