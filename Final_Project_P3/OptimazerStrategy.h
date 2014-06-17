@@ -12,7 +12,7 @@
 #include "Vector.h"
 #include "Table.h"
 
-int OptimazerStrategy_Play(Vector vector, Table table);
+int OptimazerStrategy_Play(Vector *vector, Table *table);
 
 
 #endif
