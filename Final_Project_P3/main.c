@@ -19,13 +19,15 @@ int main(int argc, const char * argv[])
 	
 	Table *table = ReadTableFromFile(fileName);
 	
-	FILE *output =  fopen("b.txt", "w");
+		//	FILE *output =  fopen("b.txt", "w");
 	
 	if (table != NULL)
 	{
-		PrintTable(table, NULL);
+			//PrintTable(table, NULL);
+		
+		WriteTableToFile(table, "b.txt");
 	
-		fclose(output);
+			//	fclose(output);
 	
 			//Vector *v = GetFreePositions(table);
 			Vector *v = GetXVector();

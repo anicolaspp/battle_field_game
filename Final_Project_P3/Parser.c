@@ -104,7 +104,7 @@ int HasTableBeenInitialized()
 	return _hasBeenInit;
 }
 
-int **GetGrid()
+int *GetGrid()
 {
 	if (HasTableBeenInitialized())
 	{

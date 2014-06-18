@@ -63,8 +63,10 @@ void WriteTableToFile(Table *table, char *fileName)
 	
 	if (fileHandler != NULL)
 	{
-		
+		PrintTable(table, fileHandler);
 	}
+	
+	fclose(fileHandler);
 }
 
 

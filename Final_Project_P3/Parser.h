@@ -23,6 +23,6 @@ int GetNumberOfPlayers();
 
 int HasTableBeenInitialized();
 
-int **GetGrid();
+int *GetGrid();
 
 #endif
