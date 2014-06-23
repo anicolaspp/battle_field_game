@@ -14,7 +14,7 @@
 
 
 
-int RandomMoveStrategy_Play(Vector *vector)
+TPoint RandomMoveStrategy_Play(Vector *vector)
 {
 	if (vector->count > 0)
 	{
@@ -24,8 +24,12 @@ int RandomMoveStrategy_Play(Vector *vector)
 		
 		int position = rand() % vector->count;
 		
-		return position;
+		return vector->values[position];
 	}
 	
-	return -1;
+	TPoint p;
+	p.X = -1;
+	p.Y = -1;
+	
+	return p;
 }

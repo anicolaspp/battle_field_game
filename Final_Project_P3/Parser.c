@@ -72,7 +72,11 @@ int *ParseInputText(char *input)
 			
 			if (grid[k] == 0)
 			{
-				_vector->values[_vector->count++] = k;
+				TPoint p;
+				p.X = i;
+				p.Y = j;
+				
+				_vector->values[_vector->count++] = p;
 			}
 		}
 		

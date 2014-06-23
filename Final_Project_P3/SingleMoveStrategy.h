@@ -11,6 +11,6 @@
 
 #include "Vector.h"
 
-int SingleMoveStrategy_Play(Vector *vector);
+TPoint SingleMoveStrategy_Play(Vector *vector);
 
 #endif

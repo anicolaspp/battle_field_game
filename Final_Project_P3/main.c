@@ -23,9 +23,9 @@ int main(int argc, const char * argv[])
 	
 	if (table != NULL)
 	{
-			//PrintTable(table, NULL);
+			PrintTable(table, NULL);
 		
-		WriteTableToFile(table, "b.txt");
+			//WriteTableToFile(table, "b.txt");
 	
 			//	fclose(output);
 	
@@ -36,7 +36,8 @@ int main(int argc, const char * argv[])
 	
 		for (int i = 0; i < v->count; i++)
 		{
-			printf("%d ", v->values[i]);
+			printf("%d ", v->values[i].X);
+			printf("%d\n", v->values[i].Y);
 		}
 	
 		printf("\n");

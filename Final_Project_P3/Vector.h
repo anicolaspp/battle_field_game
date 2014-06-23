@@ -11,17 +11,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "Point.h"
 
 typedef struct _Vector
 {
-	int *values;
+	TPoint *values;
 	int count;
 	int capacity;
 	
 } Vector;
 
 
-void Add(Vector vector, int value);
+void Add(Vector vector, TPoint value);
 
 Vector *GetVector(int size);
 

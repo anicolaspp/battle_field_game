@@ -11,12 +11,16 @@
 #include "SingleMoveStrategy.h"
 
 
-int SingleMoveStrategy_Play(Vector *vector)
+TPoint SingleMoveStrategy_Play(Vector *vector)
 {
 	if (vector->count > 0)
-	{
+	{	
 		return vector->values[0];
 	}
 	
-	return -1;
+	TPoint p;
+	p.X = -1;
+	p.Y = -1;
+	
+	return p;
 }

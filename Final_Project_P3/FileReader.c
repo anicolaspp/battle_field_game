@@ -45,7 +45,6 @@ Table *ReadTableFromFile(char *fileName)
 		return table;
 	}
 	
-	
 	free(dataString);
 	
 	table = malloc(sizeof(Table));

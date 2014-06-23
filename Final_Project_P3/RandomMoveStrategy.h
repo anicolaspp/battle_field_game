@@ -12,6 +12,6 @@
 #include "Vector.h"
 
 
-int RandomMoveStrategy_Play(Vector *vector);
+TPoint  RandomMoveStrategy_Play(Vector *vector);
 
 #endif

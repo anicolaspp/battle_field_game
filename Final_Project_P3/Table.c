@@ -12,6 +12,7 @@
 #include "Table.h"
 #include "Parser.h"
 #include "Vector.h"
+#include "Point.h"
 
 
 
@@ -27,7 +28,11 @@ Vector *GetFreePositions(Table table)
 			
 			if (table.grid[k] == 0)
 			{
-				vector->values[vector->count++] = k;
+				TPoint p;
+				p.X = i;
+				p.Y = j;
+				
+				vector->values[vector->count++] = p;
 			}
 		}
 	}
@@ -60,9 +65,9 @@ void PrintTable(Table *table, FILE *outputFile)
 	}
 }
 
-Point InvertIndex(int index, Table *table)
+TPoint InvertIndex(int index, Table *table)
 {
-	Point point;
+	TPoint point;
 	
 	// Computer here
 	
