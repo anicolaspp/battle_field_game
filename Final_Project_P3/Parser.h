@@ -17,6 +17,8 @@ int *ParseInputText(char *input);
 
 Vector *GetXVector();
 
+int * GetPlayerRanking();
+
 int GetDimensions();
 
 int GetNumberOfPlayers();

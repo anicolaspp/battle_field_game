@@ -14,6 +14,8 @@
 #include "Parser.h"
 #include "Vector.h"
 
+int *playerCount;
+
 Vector *_vector;
 
 
@@ -33,6 +35,21 @@ Vector *GetXVector()
 	return _vector;
 }
 
+int * GetPlayerRanking()
+{
+	return playerCount;
+}
+
+void InitPlayerRanking(void)
+{
+	playerCount = malloc(sizeof(int) * _numberOfPlayers);
+	
+	for (int i = 0; i <= _numberOfPlayers; i++)
+	{
+		playerCount[i] = 0;
+	}
+}
+
 int *ParseInputText(char *input)
 {
 	char *line = GetNextLine(input);
@@ -44,6 +61,8 @@ int *ParseInputText(char *input)
 	
 	grid = malloc(sizeof(int) * _dimesion * _dimesion);
 	_vector = GetVector(_dimesion * _dimesion);
+	
+	InitPlayerRanking();
 	
 	for (int i = 0; i < _dimesion; i++)
 	{
@@ -78,6 +97,11 @@ int *ParseInputText(char *input)
 				
 				_vector->values[_vector->count++] = p;
 			}
+			else
+			{
+				int playerId = grid[k];
+				playerCount[playerId]++;
+			}
 		}
 		
 		free(numbers);
@@ -85,6 +109,13 @@ int *ParseInputText(char *input)
 
 	free(line);
 	_hasBeenInit = 1;
+	
+	
+//	for (int i = 1; i <= _numberOfPlayers; i++)
+//	{
+//		printf("Player %d has %d cells\n", i, playerCount[i]);
+//	}
+
 	
 		//PrintGrid(grid);
 	
@@ -123,7 +154,7 @@ int GetNumbersInLine(char *line, int *numbers)
 	int v = 0;
 	int count = 0;
 	
-	char *current = malloc(sizeof(char) * 1000);
+	char *current = malloc(sizeof(char) * strlen(line));
 	int countCurrent = 0;
 	
 	while (v <= strlen(line))
@@ -157,7 +188,7 @@ int GetNumbersInLine(char *line, int *numbers)
 
 int ReadDimensions(char *line)
 {
-	int *numbers = malloc(sizeof(int) * 10000);
+	int *numbers = malloc(sizeof(int) * strlen(line));
 	
 	int count = GetNumbersInLine(line, numbers);
 	
