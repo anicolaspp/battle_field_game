@@ -148,13 +148,32 @@ int main(int argc, const char * argv[])
 			{
 				if (fds[i].revents == POLLIN)
 				{
-					printf("%d\n", i);
 					fds[i].revents = 0;
+				
+					int bufferSize = 300;
+					char buffer[bufferSize];
+					char * input = malloc(0);
+					
+					size_t _read = 0;
+					
+					while (1)
+					{
+						_read = read(fds[i].fd, buffer, bufferSize);
+						
+						input = realloc(input, strlen(input) + _read);
+						
+						strncat(input, buffer, _read);
+						
+						if (_read < bufferSize)
+						{
+							break;
+						}
+					}
+					
+					printf("%s\n", input);
 				}
 			}
 		}
-		
-		UnBind(numberOfPipes);
 	}
 	
 	
