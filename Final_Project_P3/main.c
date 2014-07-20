@@ -84,7 +84,7 @@ char * GetInputFileName(int index)
 }
 
 void UnBind(int pipesCount)
-{	
+{
 	for (int i = 0; i < pipesCount; i += 2)
 	{
 		char * input = GetInputFileName(i);
@@ -97,7 +97,7 @@ void UnBind(int pipesCount)
 		unlink(output);
 		
 		free(input);
-		free(output);
+		free(output); 
 	}
 }
 
