@@ -43,7 +43,6 @@
 		084264A4194B8F370049858B /* SingleMoveStrategy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SingleMoveStrategy.c; sourceTree = "<group>"; };
 		084264A6194B8FB80049858B /* RandomMoveStrategy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RandomMoveStrategy.c; sourceTree = "<group>"; };
 		08C629071957C04400A6540D /* Point.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
-		08C629081957C70800A6540D /* Stats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stats.h; sourceTree = "<group>"; };
 		08D56BB8194A56A200C3A72C /* Final_Project_P3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Final_Project_P3; sourceTree = BUILT_PRODUCTS_DIR; };
 		08D56BBB194A56A200C3A72C /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Final_Project_P3.1; sourceTree = "<group>"; };
@@ -97,7 +96,6 @@
 				0842649F194B87F50049858B /* Vector.c */,
 				0842649E194B84C50049858B /* Vector.h */,
 				08C629071957C04400A6540D /* Point.h */,
-				08C629081957C70800A6540D /* Stats.h */,
 			);
 			path = Final_Project_P3;
 			sourceTree = "<group>";

@@ -85,7 +85,7 @@ int *ParseInputText(char *input)
 		
 		for (int j = 0; j < _dimesion; j++)
 		{
-			int k = Index(i, j);
+			int k = PIndex(i, j);
 			
 			grid[k]  = numbers[j];
 			
@@ -246,7 +246,7 @@ void PrintGrid(int **grid)
 	{
 		for (int j = 0; j < GetDimensions(); j ++)
 		{
-			printf("%d ", grid[Index(i, j)]);
+			printf("%d ", grid[PIndex(i, j)]);
 		}
 		
 		printf("\n");

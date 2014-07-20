@@ -9,9 +9,19 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>build with make.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>081C9C861978200A00A43755</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>08D56BB7194A56A200C3A72C</key>
 		<dict>
 			<key>primary</key>

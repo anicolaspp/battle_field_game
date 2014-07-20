@@ -9,7 +9,7 @@
 #ifndef Final_Project_P3_Parser_h
 #define Final_Project_P3_Parser_h
 
-#define Index(row, column) GetDimensions() * row + column
+#define PIndex(row, column) GetDimensions() * row + column
 
 #include "Vector.h"
 

@@ -24,7 +24,7 @@ Vector *GetFreePositions(Table table)
 	{
 		for (int j = 0; j < table.dimensions; j++)
 		{
-			int k = Index(i,j);
+			int k = PIndex(i,j);
 			
 			if (table.grid[k] == 0)
 			{
@@ -58,7 +58,7 @@ void PrintTable(Table *table, FILE *outputFile)
 	{
 		for (int j = 0; j < table->dimensions; j++)
 		{
-			Print(table->grid[Index(i,j)], "%d ", outputFile);
+			Print(table->grid[PIndex(i,j)], "%d ", outputFile);
 		}
 		
 		Print("\n", "%s", outputFile);
