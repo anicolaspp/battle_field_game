@@ -21,10 +21,15 @@
 #include "Table.h"
 #include "Parser.h"
 
+#define true 1
+#define false 0
+
 pid_t pid;
 int numberOfGames;
 
 int numberOfPipes;
+
+void sigterm_handler(int signal);
 
 
 void ProcessFile(char * fName)
@@ -115,7 +120,7 @@ struct pollfd * CreatePipes(int numberOfPipes)
 	return result;
 }
 
-void sigterm_handler()
+void sigterm_handler(int signal)
 {
 	UnBind(numberOfPipes);
 
@@ -130,7 +135,7 @@ char * ReadInputFromFd(int fd)
 	
 	size_t _read = 0;
 	
-	while (1) 
+	while (true)
 	{
 		_read = read(fd, buffer, bufferSize);
 		
@@ -147,6 +152,8 @@ char * ReadInputFromFd(int fd)
 	return input;
 }
 
+typedef void (*sighandler_t)(int);
+
 int main(int argc, const char * argv[])
 {
 	
@@ -155,28 +162,33 @@ int main(int argc, const char * argv[])
 
 		
 		pid = getpid();
-		printf("%d", pid);
+		printf("%d\n", pid);
 		
 		int numberOfGames = 1; //atoi(argv[1]);
 		
 		int numberOfPipes = numberOfGames * 2;
 		
-		signal(SIGTERM, sigterm_handler);
+		sighandler_t handler = sigterm_handler;
+		
+		signal(SIGTERM, handler);
 		
 		struct pollfd * fds = CreatePipes(numberOfPipes);
 		
-		while (1)
+		while (true)
 		{
 			int ret = poll(fds, numberOfPipes, -1);
 			
-			for (int i = 0; i < numberOfPipes; i++)
+			for (int i = 0; i < numberOfPipes || ret == 0; i++)
 			{
 				if (fds[i].revents == POLLIN)
 				{
 					fds[i].revents = 0;
 				
 					char * inputStr = ReadInputFromFd(fds[i].fd);
-										
+							
+					
+					
+					ret--;
 				}
 			}
 		}
