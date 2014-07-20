@@ -132,9 +132,11 @@ void sigterm_handler()
 
 	printf("-----------\n");
 	
-//	
-//	UnBind(numberOfPipes);
-//
+	
+	UnBind(numberOfPipes);
+
+		//TODO: I will probably have to wait for children to finish before exit
+	
 	exit(EXIT_SUCCESS);
 }
 
@@ -164,42 +166,34 @@ int main(int argc, const char * argv[])
 	
 		//if (argc == 2)
 	{
+		signal(SIGTERM, sigterm_handler);
+		
 		pid = getpid();
 		printf("%d\n", pid);
 		
 		int numberOfGames = 1; //atoi(argv[1]);
-		
 		int numberOfPipes = numberOfGames * 2;
-		
-			//sighandler_t handler = sigterm_handler;
-		
-		signal(SIGTERM, sigterm_handler);
-		
-			//struct pollfd * fds = CreatePipes(numberOfPipes);
+		struct pollfd * fds = CreatePipes(numberOfPipes);
 		
 		while (true)
 		{
+			int ret = poll(fds, numberOfPipes, 500);
 			
-						
-				//sleep(1);
-			
-//			int ret = poll(fds, numberOfPipes, 500);
-//			
-//			for (int i = 0; i < numberOfPipes; i++)
-//			{
-//				if (fds[i].revents == POLLIN)
-//				{
-//					assert(IsInputPipeIndex(i));
-//					char * outputFileName = GetOutputFileName(i);
-//					
-//					ProcessFileContentAsync(fds[i].fd, outputFileName);
-//					
-//						//fds[i].revents = 0;
-//					printf("\n");
-//					
-//					free(outputFileName);
-//				}
-//			}
+			for (int i = 0; i < numberOfPipes; i++)
+			{
+				if (fds[i].revents == POLLIN)
+				{
+					assert(IsInputPipeIndex(i));
+					char * outputFileName = GetOutputFileName(i);
+					
+					ProcessFileContentAsync(fds[i].fd, outputFileName);
+					
+						//fds[i].revents = 0;
+					printf("\n");
+					
+					free(outputFileName);
+				}
+			}
 		}
 	}
 	
