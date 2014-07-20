@@ -13,7 +13,7 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <assert.h>
-
+#include <unistd.h>
 
 #include "FileReader.h"
 #include "Table.h"
@@ -98,7 +98,6 @@ char * GetOutputFileName(int index)
 	return output;
 }
 
-	//TODO: check this function (number of pipes)
 struct pollfd * CreatePipes(int numberOfPipes)
 {
 	struct pollfd * result = malloc(sizeof(struct pollfd) * numberOfPipes);
@@ -106,7 +105,6 @@ struct pollfd * CreatePipes(int numberOfPipes)
 	for (int i = 0; i < numberOfPipes; i += 2)
 	{
 		char * input = GetInputFileName(i);
-			//sprintf(input, "%d_%di", pid, i);
 		
 		mkfifo(input, 0600);
 		
@@ -114,9 +112,7 @@ struct pollfd * CreatePipes(int numberOfPipes)
 		result[i].events = POLLIN;
 		result[i].revents = 0;
 		
-		
 		char * output = GetOutputFileName(i);
-			//		sprintf(output, "%d_%do", pid, i);
 		
 		mkfifo(output, 0600);
 		
@@ -129,10 +125,16 @@ struct pollfd * CreatePipes(int numberOfPipes)
 	return result;
 }
 
-void sigterm_handler(int signal)
-{
-	UnBind(numberOfPipes);
+int _sig ;
 
+void sigterm_handler()
+{
+
+	printf("-----------\n");
+	
+//	
+//	UnBind(numberOfPipes);
+//
 	exit(EXIT_SUCCESS);
 }
 
@@ -152,13 +154,16 @@ void ProcessFileContentAsync(int fd, char * outputFileName)
 
 typedef void (*sighandler_t)(int);
 
+int IsInputPipeIndex(int index)
+{
+	return index % 2 == 0;
+}
+
 int main(int argc, const char * argv[])
 {
 	
 		//if (argc == 2)
 	{
-
-		
 		pid = getpid();
 		printf("%d\n", pid);
 		
@@ -166,30 +171,35 @@ int main(int argc, const char * argv[])
 		
 		int numberOfPipes = numberOfGames * 2;
 		
-		sighandler_t handler = sigterm_handler;
+			//sighandler_t handler = sigterm_handler;
 		
-		signal(SIGTERM, handler);
+		signal(SIGTERM, sigterm_handler);
 		
-		struct pollfd * fds = CreatePipes(numberOfPipes);
+			//struct pollfd * fds = CreatePipes(numberOfPipes);
 		
 		while (true)
 		{
-			int ret = poll(fds, numberOfPipes, -1);
 			
-			for (int i = 0; i < numberOfPipes || ret == 0; i++)
-			{
-				if (fds[i].revents == POLLIN)
-				{
-					assert(i % 2 == 0);
-					
-					char * outputFileName = GetOutputFileName(i);
-					
-					ProcessFileContentAsync(fds[i].fd, outputFileName);
-					
-					fds[i].revents = 0;
-					ret--;
-				}
-			}
+						
+				//sleep(1);
+			
+//			int ret = poll(fds, numberOfPipes, 500);
+//			
+//			for (int i = 0; i < numberOfPipes; i++)
+//			{
+//				if (fds[i].revents == POLLIN)
+//				{
+//					assert(IsInputPipeIndex(i));
+//					char * outputFileName = GetOutputFileName(i);
+//					
+//					ProcessFileContentAsync(fds[i].fd, outputFileName);
+//					
+//						//fds[i].revents = 0;
+//					printf("\n");
+//					
+//					free(outputFileName);
+//				}
+//			}
 		}
 	}
 	

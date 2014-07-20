@@ -71,7 +71,7 @@ char * ReadFileContent(int fd)
 		
 		input = realloc(input, strlen(input) + _read + 1);
 		
-		strcat(input, buffer);
+		strncat(input, buffer, _read);
 	}
 	while (_read == bufferSize);
 	

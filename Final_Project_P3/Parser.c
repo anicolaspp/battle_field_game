@@ -40,6 +40,12 @@ int * GetPlayerRanking()
 	return playerCount;
 }
 
+void InitVars()
+{
+	readingIndex = 0;
+	_hasBeenInit = 0;
+}
+
 void InitPlayerRanking(void)
 {
 	playerCount = malloc(sizeof(int) * _numberOfPlayers);
@@ -52,6 +58,8 @@ void InitPlayerRanking(void)
 
 int *ParseInputText(char *input)
 {
+	InitVars();
+	
 	char *line = GetNextLine(input);
 	
 	if (!ReadDimensions(line))
