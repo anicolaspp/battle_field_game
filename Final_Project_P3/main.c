@@ -15,6 +15,7 @@
 #include <sys/stat.h>
 #include <poll.h>
 #include <fcntl.h>
+#include <assert.h>
 
 
 #include "FileReader.h"
@@ -32,48 +33,39 @@ int numberOfPipes;
 void sigterm_handler(int signal);
 
 
-void ProcessFile(char * fName)
+void ProcessFile(char * fName, char * outputFileName)
 {
 	Table *table = ReadTableFromFile(fName);
-	
-	char * foutputName = malloc(sizeof(char) * strlen(fName));
-	
-	strncpy(foutputName, fName, strlen(fName));
-	strcat(foutputName, ".stat");
-		
-	FILE *output =  fopen("b.txt", "w");
 		
 	if (table != NULL)
 	{
-		Vector * v = GetXVector();
+		Vector * emptyCellVector = GetXVector();
 		
-		FILE * output = fopen(foutputName, "w");
+		printf("Size: %d\n", table->dimensions);
+		printf("Number of players: %d\n", table->numberOfPlayers);
+		
+		printf("Number of empty cells: %d\n", emptyCellVector->count);
+		
+		if (emptyCellVector->count > 0)
+		{
+			printf("Location of first empty cells: [%d, %d]\n",
+				   emptyCellVector->values[0].X + 1, emptyCellVector->values[0].Y + 1);
+		
+			printf("Location of last empty cells: [%d, %d]\n",
+				   emptyCellVector->values[emptyCellVector->count - 1].X + 1, emptyCellVector->values[emptyCellVector->count - 1].Y + 1);
+		}
+	
+		FILE *output =  fopen(outputFileName, "w");
 		
 		if (output)
 		{
-			fprintf(output, "Size: %d\n", table->dimensions);
-			fprintf(output, "Number of players: %d\n", table->numberOfPlayers);
-		
-			fprintf(output, "Number of empty cells: %d\n", v->count);
-		
-			if (v->count > 0)
-			{
-				fprintf(output, "Location of first empty cells: [%d, %d]\n", v->values[0].X + 1, v->values[0].Y + 1);
-				fprintf(output, "Location of last empty cells: [%d, %d]\n", v->values[v->count - 1].X + 1, v->values[v->count - 1].Y + 1);
-			}
-		
-			fprintf(output, "Player ranking:\n");
-		
-			int * playersRanking = GetPlayerRanking();
-		
-			for (int i = 1; i <= table->numberOfPlayers; i++)
-			{
-				fprintf(output, "    Player %d has %d cells\n", i, playersRanking[i]);
-			}
-							
-			free(v);
-			free(table);
+				//TODO: ready to play
+				
 		}
+		
+		free(emptyCellVector);
+		free(table);
+
 	}
 }
 
@@ -93,14 +85,31 @@ void UnBind(int pipesCount)
 	}
 }
 
+char * GetInputFileName(int index)
+{
+	char * input = malloc(sizeof(char) * 20);
+	sprintf(input, "%d_%di", pid, index);
+	
+	return input;
+}
+
+char * GetOutputFileName(int index)
+{
+	char * output = malloc(sizeof(char) * 20);
+	sprintf(output, "%d_%do", pid, index);
+	
+	return output;
+}
+
+	//TODO: check this function (number of pipes)
 struct pollfd * CreatePipes(int numberOfPipes)
 {
 	struct pollfd * result = malloc(sizeof(struct pollfd) * numberOfPipes);
 	
 	for (int i = 0; i < numberOfPipes; i += 2)
 	{
-		char input[20];
-		sprintf(input, "%d_%di", pid, i);
+		char * input = GetInputFileName(i);
+			//sprintf(input, "%d_%di", pid, i);
 		
 		mkfifo(input, 0600);
 		
@@ -109,12 +118,15 @@ struct pollfd * CreatePipes(int numberOfPipes)
 		result[i].revents = 0;
 		
 		
-		char output[20];
-		sprintf(output, "%d_%do", pid, i);
+		char * output = GetOutputFileName(i);
+			//		sprintf(output, "%d_%do", pid, i);
 		
 		mkfifo(output, 0600);
 		
 		result[i + 1].fd = open(output, O_RDWR);
+		
+		free(input);
+		free(output);
 	}
 	
 	return result;
@@ -152,6 +164,17 @@ char * ReadInputFromFd(int fd)
 	return input;
 }
 
+void ProcessFileContentAsync(char * fileContentStr, char * outputFileName)
+{
+	pid_t nPid = fork();
+	
+	if (nPid)
+	{
+		ProcessFile(fileContentStr, outputFileName);
+		exit(EXIT_SUCCESS);
+	}
+}
+
 typedef void (*sighandler_t)(int);
 
 int main(int argc, const char * argv[])
@@ -180,15 +203,20 @@ int main(int argc, const char * argv[])
 			
 			for (int i = 0; i < numberOfPipes || ret == 0; i++)
 			{
+				assert(i % 2 == 0);
+				
 				if (fds[i].revents == POLLIN)
 				{
-					fds[i].revents = 0;
-				
 					char * inputStr = ReadInputFromFd(fds[i].fd);
-							
 					
+					char * outputFileName = GetOutputFileName(i);
 					
+					ProcessFileContentAsync(inputStr, outputFileName);
+					
+					fds[i].revents = 0;
 					ret--;
+
+					free(inputStr);
 				}
 			}
 		}
