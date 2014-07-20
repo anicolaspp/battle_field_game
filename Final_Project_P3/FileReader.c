@@ -10,38 +10,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
+
 
 
 #include "FileReader.h"
 #include "Parser.h"
 
-char * ReadFileContent(FILE *fileHandler);
+char * ReadFileContent(int fd);
 
 
 
-Table *ReadTableFromFile(char *fileName)
+Table *ReadTableFromFile(int fd)
 {
 	Table *table = NULL;
-	
-	FILE *fileHandler = fopen(fileName, "r");
-	
-	if (!fileHandler)
-	{
-		return table;
-	}
 		
-	char *dataString = ReadFileContent(fileHandler);
-	
-	fclose(fileHandler);
-	
-	// I will need the JSON FORMATTER here!!!
+	char *dataString = ReadFileContent(fd);
 	
 	int *grid = ParseInputText(dataString);
 	
 	if (grid == NULL)
 	{
-		free(dataString);
-		
 		return table;
 	}
 	
@@ -68,19 +57,26 @@ void WriteTableToFile(Table *table, char *fileName)
 	fclose(fileHandler);
 }
 
-
-
-
-char * ReadFileContent(FILE *fileHandler)
+char * ReadFileContent(int fd)
 {
-	fseek(fileHandler, 0, SEEK_END);
-	int fsize = ftell(fileHandler);
-	rewind(fileHandler);
+	int bufferSize = 1024; // 1 KB
+	char buffer[1024];
+	char * input = malloc(sizeof(char) * 1);
 	
-	char *dataString = (char*) malloc(sizeof(char) * fsize);
-	fread(dataString, 1, fsize, fileHandler);
+	size_t _read = 0;
 	
-	return dataString;
+	do
+	{
+		_read = read(fd, buffer, bufferSize);
+		
+		input = realloc(input, strlen(input) + _read + 1);
+		
+		strcat(input, buffer);
+	}
+	while (_read == bufferSize);
+	
+	
+	return input;
 }
 
 

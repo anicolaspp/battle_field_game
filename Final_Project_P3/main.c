@@ -7,11 +7,8 @@
 //
 
 #include <stdio.h>
-#include <Time.h>
-#include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
-#include <unistd.h>
 #include <sys/stat.h>
 #include <poll.h>
 #include <fcntl.h>
@@ -33,9 +30,9 @@ int numberOfPipes;
 void sigterm_handler(int signal);
 
 
-void ProcessFile(char * fName, char * outputFileName)
+void ProcessFile(int fd, char * outputFileName)
 {
-	Table *table = ReadTableFromFile(fName);
+	Table *table = ReadTableFromFile(fd);
 		
 	if (table != NULL)
 	{
@@ -139,40 +136,18 @@ void sigterm_handler(int signal)
 	exit(EXIT_SUCCESS);
 }
 
-char * ReadInputFromFd(int fd)
+void ProcessFileContentAsync(int fd, char * outputFileName)
 {
-	int bufferSize = 300;
-	char buffer[bufferSize];
-	char * input = malloc(0);
-	
-	size_t _read = 0;
-	
-	while (true)
-	{
-		_read = read(fd, buffer, bufferSize);
-		
-		input = realloc(input, strlen(input) + _read);
-		
-		strncat(input, buffer, _read);
-		
-		if (_read < bufferSize)
-		{
-			break;
-		}
-	}
-
-	return input;
-}
-
-void ProcessFileContentAsync(char * fileContentStr, char * outputFileName)
-{
-	pid_t nPid = fork();
-	
-	if (nPid)
-	{
-		ProcessFile(fileContentStr, outputFileName);
-		exit(EXIT_SUCCESS);
-	}
+	ProcessFile(fd, outputFileName);
+//	
+//	
+//	pid_t nPid = fork();
+//	
+//	if (nPid)
+//	{
+//		ProcessFile(fileContentStr, outputFileName);
+//		exit(EXIT_SUCCESS);
+//	}
 }
 
 typedef void (*sighandler_t)(int);
@@ -203,20 +178,16 @@ int main(int argc, const char * argv[])
 			
 			for (int i = 0; i < numberOfPipes || ret == 0; i++)
 			{
-				assert(i % 2 == 0);
-				
 				if (fds[i].revents == POLLIN)
 				{
-					char * inputStr = ReadInputFromFd(fds[i].fd);
+					assert(i % 2 == 0);
 					
 					char * outputFileName = GetOutputFileName(i);
 					
-					ProcessFileContentAsync(inputStr, outputFileName);
+					ProcessFileContentAsync(fds[i].fd, outputFileName);
 					
 					fds[i].revents = 0;
 					ret--;
-
-					free(inputStr);
 				}
 			}
 		}
