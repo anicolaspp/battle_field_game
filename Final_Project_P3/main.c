@@ -122,6 +122,31 @@ void sigterm_handler()
 	exit(EXIT_SUCCESS);
 }
 
+char * ReadInputFromFd(int fd)
+{
+	int bufferSize = 300;
+	char buffer[bufferSize];
+	char * input = malloc(0);
+	
+	size_t _read = 0;
+	
+	while (1)
+	{
+		_read = read(fd, buffer, bufferSize);
+		
+		input = realloc(input, strlen(input) + _read);
+		
+		strncat(input, buffer, _read);
+		
+		if (_read < bufferSize)
+		{
+			break;
+		}
+	}
+
+	return input;
+}
+
 int main(int argc, const char * argv[])
 {
 	
@@ -150,27 +175,8 @@ int main(int argc, const char * argv[])
 				{
 					fds[i].revents = 0;
 				
-					int bufferSize = 300;
-					char buffer[bufferSize];
-					char * input = malloc(0);
-					
-					size_t _read = 0;
-					
-					while (1)
-					{
-						_read = read(fds[i].fd, buffer, bufferSize);
-						
-						input = realloc(input, strlen(input) + _read);
-						
-						strncat(input, buffer, _read);
-						
-						if (_read < bufferSize)
-						{
-							break;
-						}
-					}
-					
-					printf("%s\n", input);
+					char * inputStr = ReadInputFromFd(fds[i].fd);
+										
 				}
 			}
 		}
