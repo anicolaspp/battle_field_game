@@ -22,6 +22,9 @@
 #include "Parser.h"
 
 pid_t pid;
+int numberOfGames;
+
+int numberOfPipes;
 
 
 void ProcessFile(char * fName)
@@ -112,18 +115,28 @@ struct pollfd * CreatePipes(int numberOfPipes)
 	return result;
 }
 
+void sigterm_handler()
+{
+	UnBind(numberOfPipes);
+
+	exit(EXIT_SUCCESS);
+}
 
 int main(int argc, const char * argv[])
 {
 	
 		//if (argc == 2)
 	{
+
+		
 		pid = getpid();
 		printf("%d", pid);
 		
 		int numberOfGames = 1; //atoi(argv[1]);
 		
 		int numberOfPipes = numberOfGames * 2;
+		
+		signal(SIGTERM, sigterm_handler);
 		
 		struct pollfd * fds = CreatePipes(numberOfPipes);
 		
