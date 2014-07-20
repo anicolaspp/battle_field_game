@@ -24,8 +24,8 @@
 
 pid_t pid;
 int numberOfGames;
-
 int numberOfPipes;
+struct pollfd * fds;
 
 void sigterm_handler(int signal);
 
@@ -66,21 +66,14 @@ void ProcessFile(int fd, char * outputFileName)
 	}
 }
 
-void UnBind(int pipesCount)
+char * GetOutputFileName(int index)
 {
-	for (int i = 0; i < pipesCount; i++)
-	{
-		char input[20];
-		sprintf(input, "%d_%di", pid, i);
-		
-		unlink(input);
-		
-		char output[20];
-		sprintf(output, "%d_%do", pid, i);
-		
-		unlink(output);
-	}
+	char * output = malloc(sizeof(char) * 20);
+	sprintf(output, "%d_%do", pid, index);
+	
+	return output;
 }
+
 
 char * GetInputFileName(int index)
 {
@@ -90,13 +83,26 @@ char * GetInputFileName(int index)
 	return input;
 }
 
-char * GetOutputFileName(int index)
-{
-	char * output = malloc(sizeof(char) * 20);
-	sprintf(output, "%d_%do", pid, index);
-	
-	return output;
+void UnBind(int pipesCount)
+{	
+	for (int i = 0; i < pipesCount; i += 2)
+	{
+		char * input = GetInputFileName(i);
+		char * output = GetOutputFileName(i);
+
+		close(fds[i].fd);
+		close(fds[i+1].fd);
+
+		unlink(input);
+		unlink(output);
+		
+		free(input);
+		free(output);
+	}
 }
+
+
+
 
 struct pollfd * CreatePipes(int numberOfPipes)
 {
@@ -171,9 +177,11 @@ int main(int argc, const char * argv[])
 		pid = getpid();
 		printf("%d\n", pid);
 		
-		int numberOfGames = 1; //atoi(argv[1]);
-		int numberOfPipes = numberOfGames * 2;
-		struct pollfd * fds = CreatePipes(numberOfPipes);
+		numberOfGames = 1; //atoi(argv[1]);
+		numberOfPipes = numberOfGames * 2;
+		fds = CreatePipes(numberOfPipes);
+		
+			//UnBind(numberOfPipes);
 		
 		while (true)
 		{
@@ -187,9 +195,6 @@ int main(int argc, const char * argv[])
 					char * outputFileName = GetOutputFileName(i);
 					
 					ProcessFileContentAsync(fds[i].fd, outputFileName);
-					
-						//fds[i].revents = 0;
-					printf("\n");
 					
 					free(outputFileName);
 				}
