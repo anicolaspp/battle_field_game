@@ -29,11 +29,94 @@ struct pollfd * fds;
 
 void sigterm_handler(int signal);
 
+void ProcessFileContentAsync(int fd, char * outputFileName);
+void ProcessFile(int fd, char * outputFileName);
+
+char * GetOutputFileName(int index);
+char * GetInputFileName(int index);
+
+struct pollfd * CreatePipes(int numberOfPipes);
+void UnBind(int pipesCount);
+
+int IsInputPipeIndex(int index);
+
+
+int main(int argc, const char * argv[])
+{
+		//if (argc == 2)
+	{
+		signal(SIGTERM, sigterm_handler);
+		
+		pid = getpid();
+		printf("%d\n", pid);
+		
+		numberOfGames = 1; //atoi(argv[1]);
+		numberOfPipes = numberOfGames * 2;
+		fds = CreatePipes(numberOfPipes);
+		
+		while (true)
+		{
+			int ret = poll(fds, numberOfPipes, -1);
+			
+			if (ret > 0)
+			{
+				for (int i = 0; i < numberOfPipes; i++)
+				{
+					if (fds[i].revents == POLLIN)
+					{
+						assert(IsInputPipeIndex(i));
+						char * outputFileName = GetOutputFileName(i);
+					
+						ProcessFileContentAsync(fds[i].fd, outputFileName);
+					
+						free(outputFileName);
+					}
+				}
+			}
+		}
+	}
+	
+    return 0;	
+}
+
+void sigterm_handler()
+{
+	
+	printf("-----------\n");
+	
+	
+	UnBind(numberOfPipes);
+	
+		//TODO: I will probably have to wait for children to finish before exit
+	
+	exit(EXIT_SUCCESS);
+}
+
+
+
+int IsInputPipeIndex(int index)
+{
+	return index % 2 == 0;
+}
+
+void ProcessFileContentAsync(int fd, char * outputFileName)
+{
+	ProcessFile(fd, outputFileName);
+		//
+		//
+		//	pid_t nPid = fork();
+		//
+		//	if (nPid)
+		//	{
+		//		ProcessFile(fd, outputFileName);
+		//		exit(EXIT_SUCCESS);
+		//	}
+}
 
 void ProcessFile(int fd, char * outputFileName)
 {
 	Table *table = ReadTableFromFile(fd);
-		
+	
 	if (table != NULL)
 	{
 		Vector * emptyCellVector = GetXVector();
@@ -47,40 +130,23 @@ void ProcessFile(int fd, char * outputFileName)
 		{
 			printf("Location of first empty cells: [%d, %d]\n",
 				   emptyCellVector->values[0].X + 1, emptyCellVector->values[0].Y + 1);
-		
+			
 			printf("Location of last empty cells: [%d, %d]\n",
 				   emptyCellVector->values[emptyCellVector->count - 1].X + 1, emptyCellVector->values[emptyCellVector->count - 1].Y + 1);
 		}
-	
+		
 		FILE *output =  fopen(outputFileName, "w");
 		
 		if (output)
 		{
 				//TODO: ready to play
-				
+			
 		}
 		
 		free(emptyCellVector);
 		free(table);
-
+		
 	}
-}
-
-char * GetOutputFileName(int index)
-{
-	char * output = malloc(sizeof(char) * 20);
-	sprintf(output, "%d_%do", pid, index);
-	
-	return output;
-}
-
-
-char * GetInputFileName(int index)
-{
-	char * input = malloc(sizeof(char) * 20);
-	sprintf(input, "%d_%di", pid, index);
-	
-	return input;
 }
 
 void UnBind(int pipesCount)
@@ -89,16 +155,18 @@ void UnBind(int pipesCount)
 	{
 		char * input = GetInputFileName(i);
 		char * output = GetOutputFileName(i);
-
+		
 		close(fds[i].fd);
 		close(fds[i+1].fd);
-
+		
 		unlink(input);
 		unlink(output);
 		
 		free(input);
-		free(output); 
+		free(output);
 	}
+	
+	free(fds);
 }
 
 
@@ -131,125 +199,21 @@ struct pollfd * CreatePipes(int numberOfPipes)
 	return result;
 }
 
-int _sig ;
-
-void sigterm_handler()
+char * GetOutputFileName(int index)
 {
-
-	printf("-----------\n");
+	char * output = malloc(sizeof(char) * 20);
+	sprintf(output, "%d_%do", pid, index);
 	
-	
-	UnBind(numberOfPipes);
-
-		//TODO: I will probably have to wait for children to finish before exit
-	
-	exit(EXIT_SUCCESS);
+	return output;
 }
 
-void ProcessFileContentAsync(int fd, char * outputFileName)
+
+char * GetInputFileName(int index)
 {
-	ProcessFile(fd, outputFileName);
-//	
-//	
-//	pid_t nPid = fork();
-//	
-//	if (nPid)
-//	{
-//		ProcessFile(fileContentStr, outputFileName);
-//		exit(EXIT_SUCCESS);
-//	}
+	char * input = malloc(sizeof(char) * 20);
+	sprintf(input, "%d_%di", pid, index);
+	
+	return input;
 }
 
-typedef void (*sighandler_t)(int);
-
-int IsInputPipeIndex(int index)
-{
-	return index % 2 == 0;
-}
-
-int main(int argc, const char * argv[])
-{
-	
-		//if (argc == 2)
-	{
-		signal(SIGTERM, sigterm_handler);
-		
-		pid = getpid();
-		printf("%d\n", pid);
-		
-		numberOfGames = 1; //atoi(argv[1]);
-		numberOfPipes = numberOfGames * 2;
-		fds = CreatePipes(numberOfPipes);
-		
-			//UnBind(numberOfPipes);
-		
-		while (true)
-		{
-			int ret = poll(fds, numberOfPipes, 500);
-			
-			for (int i = 0; i < numberOfPipes; i++)
-			{
-				if (fds[i].revents == POLLIN)
-				{
-					assert(IsInputPipeIndex(i));
-					char * outputFileName = GetOutputFileName(i);
-					
-					ProcessFileContentAsync(fds[i].fd, outputFileName);
-					
-					free(outputFileName);
-				}
-			}
-		}
-	}
-	
-	
-	
-//	if (argc != 2)
-//	{
-//		printf("Incorrent input");
-//
-//		return -1;
-//	}
-//	
-//	char * fileName = argv[1];
-//	FILE * handler = fopen(fileName, "r");
-//	
-//	if (handler)
-//	{
-//		char * fName = malloc(sizeof(char) * 30);
-//		
-//		while (1)
-//		{
-//			int result = fscanf(handler, "%s\n", fName);
-//			
-//			if (result == EOF)
-//			{
-//				break;
-//			}
-//			
-//			pid_t pid = fork();
-//			
-//			if (pid == 0)
-//			{
-//				ProcessFile(fName);
-//				
-//				return 0;
-//			}
-//			else
-//			{
-//				printf("Created child %d working of file %s\n", pid, fName);
-//			}
-//		}
-//	
-//	}
-//	
-//	int status;
-//	pid_t wpid;
-//	
-//	while ((wpid = wait(&status)) > 0) {
-//
-//	}
-	
-    return 0;	
-}
 
