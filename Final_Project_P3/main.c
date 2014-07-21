@@ -18,6 +18,8 @@
 #include "FileReader.h"
 #include "Table.h"
 #include "Parser.h"
+#include "SingleMoveStrategy.h"
+#include "RandomMoveStrategy.h"
 
 #define true 1
 #define false 0
@@ -135,11 +137,17 @@ void ProcessFile(int fd, char * outputFileName)
 				   emptyCellVector->values[emptyCellVector->count - 1].X + 1, emptyCellVector->values[emptyCellVector->count - 1].Y + 1);
 		}
 		
+		int playerId = 0; //GetPlayerId();
+		
 		FILE *output =  fopen(outputFileName, "w");
 		
 		if (output)
 		{
 				//TODO: ready to play
+			
+			TPoint move = RandomMoveStrategy_Play(emptyCellVector);
+			
+			fprintf(output, "[%d, %d, %d]", playerId, move.X + 1, move.Y + 1);
 			
 		}
 		
