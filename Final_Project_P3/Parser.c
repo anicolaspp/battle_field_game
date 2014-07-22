@@ -48,7 +48,7 @@ void InitVars()
 
 void InitPlayerRanking(void)
 {
-	playerCount = malloc(sizeof(int) * _numberOfPlayers);
+	playerCount = calloc(_numberOfPlayers, sizeof(int));//(sizeof(int) * _numberOfPlayers);
 	
 	for (int i = 0; i <= _numberOfPlayers; i++)
 	{
@@ -56,7 +56,7 @@ void InitPlayerRanking(void)
 	}
 }
 
-int *ParseInputText(char *input)
+int * ParseInputText(char *input)
 {
 	InitVars();
 	
@@ -67,14 +67,15 @@ int *ParseInputText(char *input)
 		return 0;
 	}
 	
-	grid = malloc(sizeof(int) * _dimesion * _dimesion);
+	grid = calloc(_dimesion * _dimesion, sizeof(int));//(sizeof(int) * _dimesion * _dimesion);
 	_vector = GetVector(_dimesion * _dimesion);
 	
-	InitPlayerRanking();
+	free(line);
+		//InitPlayerRanking();
 	
 	for (int i = 0; i < _dimesion; i++)
 	{
-		free(line);
+			//free(line);
 		line = GetNextLine(input);
 		
 		if (strlen(line) <= 0)
@@ -82,7 +83,7 @@ int *ParseInputText(char *input)
 				//error the input has an incorrect format
 		}
 		
-		int *numbers = malloc(sizeof(int) * _dimesion);
+		int *numbers = calloc(_dimesion, sizeof(int));//(sizeof(int) * _dimesion);
 		
 		int count = GetNumbersInLine(line, numbers);
 		
@@ -105,28 +106,14 @@ int *ParseInputText(char *input)
 				
 				_vector->values[_vector->count++] = p;
 			}
-			else
-			{
-				int playerId = grid[k];
-				playerCount[playerId]++;
-			}
 		}
-		
+
+		free(line);
 		free(numbers);
 	}
 
-	free(line);
+	
 	_hasBeenInit = 1;
-	
-	
-//	for (int i = 1; i <= _numberOfPlayers; i++)
-//	{
-//		printf("Player %d has %d cells\n", i, playerCount[i]);
-//	}
-
-	
-		//PrintGrid(grid);
-	
 	
 	return grid;
 	
@@ -162,7 +149,7 @@ int GetNumbersInLine(char *line, int *numbers)
 	int v = 0;
 	int count = 0;
 	
-	char *current = malloc(sizeof(char) * strlen(line));
+	char *current = calloc(strlen(line), sizeof(char));//(sizeof(char) * strlen(line));
 	int countCurrent = 0;
 	
 	while (v <= strlen(line))
@@ -196,7 +183,7 @@ int GetNumbersInLine(char *line, int *numbers)
 
 int ReadDimensions(char *line)
 {
-	int *numbers = malloc(sizeof(int) * strlen(line));
+	int *numbers = calloc(strlen(line), sizeof(int));//(sizeof(int) * strlen(line));
 	
 	int count = GetNumbersInLine(line, numbers);
 	
@@ -223,7 +210,7 @@ char *GetNextLine(char * input)
 		return "";
 	}
 	
-	char *result = malloc(sizeof(char) * len);
+	char *result = calloc(len, sizeof(char));
 	int vIndex = 0;
 	
 	while (readingIndex < len)

@@ -20,6 +20,7 @@
 #include "Parser.h"
 #include "SingleMoveStrategy.h"
 #include "RandomMoveStrategy.h"
+#include "Vector.h"
 
 #define true 1
 #define false 0
@@ -29,10 +30,12 @@ int numberOfGames;
 int numberOfPipes;
 struct pollfd * fds;
 
+int * playerIds;
+
 void sigterm_handler(int signal);
 
-void ProcessFileContentAsync(int fd, int outFd);
-void ProcessFile(int fd, int outFd);
+void ProcessFileContentAsync(int fd, int outFd, int gameId);
+void ProcessFile(int fd, int outFd, int gameId);
 
 char * GetOutputFileName(int index);
 char * GetInputFileName(int index);
@@ -41,6 +44,8 @@ void CreatePipes(int numberOfPipes);
 void UnBind(int pipesCount);
 
 int IsInputPipeIndex(int index);
+
+
 
 
 int main(int argc, const char * argv[])
@@ -53,6 +58,14 @@ int main(int argc, const char * argv[])
 		printf("%d\n", pid);
 		
 		numberOfGames = 1; //atoi(argv[1]);
+		
+		playerIds = malloc(sizeof(int) * numberOfGames);
+		
+		for (int i = 0 ; i < numberOfGames; i++)
+		{
+			playerIds[i] = -1;
+		}
+		
 		numberOfPipes = numberOfGames * 2;
 		CreatePipes(numberOfPipes);
 		
@@ -67,11 +80,25 @@ int main(int argc, const char * argv[])
 					if (fds[i].revents == POLLIN)
 					{
 						assert(IsInputPipeIndex(i));
-						char * outputFileName = GetOutputFileName(i);
-					
-						ProcessFileContentAsync(fds[i].fd, fds[i + 1].fd);
-					
-						free(outputFileName);
+						
+						ProcessFile(fds[i].fd, fds[i + 1].fd, i);
+//						
+//						pid_t id = fork();
+//						
+//												
+//						if (id == 0)
+//						{
+//							printf("%d\n", getpid());
+//							
+//							int x = dup(fds[i].fd);
+//							int y = dup(fds[i + 1].fd);
+//							
+//							ProcessFile(x, y);
+//
+//								//							ProcessFile(fds[i].fd, fds[i + 1].fd);
+//							
+//							return 0;
+//						}
 					}
 				}
 			}
@@ -83,11 +110,9 @@ int main(int argc, const char * argv[])
 
 void sigterm_handler()
 {
-	
-	printf("-----------\n");
-	
-	
 	UnBind(numberOfPipes);
+	
+	free(playerIds);
 	
 		//TODO: I will probably have to wait for children to finish before exit
 	
@@ -101,9 +126,9 @@ int IsInputPipeIndex(int index)
 	return index % 2 == 0;
 }
 
-void ProcessFileContentAsync(int fd, int outFd)
+void ProcessFileContentAsync(int fd, int outFd, int gameId)
 {
-	ProcessFile(fd, outFd);
+	ProcessFile(fd, outFd, gameId);
 		//
 		//
 		//	pid_t nPid = fork();
@@ -115,7 +140,34 @@ void ProcessFileContentAsync(int fd, int outFd)
 		//	}
 }
 
-void ProcessFile(int fd, int outFd)
+int GetPlayerId(int gameId, Table * table)
+{
+	if (playerIds[gameId] >= 0)
+	{
+		return playerIds[gameId];
+	}
+	
+	int maxValue = -1;
+	
+	for (int i = 0; i < table->dimensions; i ++)
+	{
+		for (int j = 0; j < table->dimensions; j++)
+		{
+			int index = PIndex(i, j);
+			
+			if (maxValue < table->grid[index])
+			{
+				maxValue = table->grid[index];
+			}
+		}
+	}
+	
+	playerIds[gameId] = maxValue + 1;
+	
+	return maxValue + 1;
+}
+
+void ProcessFile(int fd, int outFd, int gameId)
 {
 	Table *table = ReadTableFromFile(fd);
 	
@@ -137,7 +189,7 @@ void ProcessFile(int fd, int outFd)
 				   emptyCellVector->values[emptyCellVector->count - 1].X + 1, emptyCellVector->values[emptyCellVector->count - 1].Y + 1);
 		}
 		
-		int playerId = 0; //GetPlayerId();
+		int playerId = GetPlayerId(gameId, table);
 		
 		
 		TPoint move = RandomMoveStrategy_Play(emptyCellVector);
@@ -147,9 +199,11 @@ void ProcessFile(int fd, int outFd)
 		
 		write(outFd, buffer, len);
 			
+		free(emptyCellVector->values);
 		free(emptyCellVector);
-		free(table);
 		
+		free(table->grid);
+		free(table);
 	}
 }
 

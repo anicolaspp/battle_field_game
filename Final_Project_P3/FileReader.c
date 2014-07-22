@@ -36,7 +36,7 @@ Table *ReadTableFromFile(int fd)
 	
 	free(dataString);
 	
-	table = malloc(sizeof(Table));
+	table = calloc(1, sizeof(Table));//(sizeof(Table));
 
 	table->grid = grid;
 	table->dimensions = GetDimensions();
@@ -61,13 +61,18 @@ char * ReadFileContent(int fd)
 {
 	int bufferSize = 1024; // 1 KB
 	char buffer[1024];
-	char * input = malloc(sizeof(char) * 1);
+	char * input = calloc(bufferSize, sizeof(char)); //malloc(sizeof(char) * 1);
+	
+	
 	
 	size_t _read = 0;
 	
 	do
 	{
 		_read = read(fd, buffer, bufferSize);
+		
+			//printf("%d\n%s\n",_read, input);
+		
 		
 		input = realloc(input, strlen(input) + _read + 1);
 		

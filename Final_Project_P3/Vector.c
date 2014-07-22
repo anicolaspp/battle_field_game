@@ -13,8 +13,8 @@
 
 Vector *GetVector(int size)
 {
-	Vector *v = malloc(sizeof(Vector));
-	v->values = malloc(sizeof(int) * size);
+	Vector *v = calloc(1, sizeof(Vector));//(sizeof(Vector));
+	v->values = calloc(size, sizeof(int));//(sizeof(int) * size);
 	v->capacity = size;
 	v->count = 0;
 	
