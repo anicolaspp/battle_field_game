@@ -31,13 +31,13 @@ struct pollfd * fds;
 
 void sigterm_handler(int signal);
 
-void ProcessFileContentAsync(int fd, char * outputFileName);
-void ProcessFile(int fd, char * outputFileName);
+void ProcessFileContentAsync(int fd, int outFd);
+void ProcessFile(int fd, int outFd);
 
 char * GetOutputFileName(int index);
 char * GetInputFileName(int index);
 
-struct pollfd * CreatePipes(int numberOfPipes);
+void CreatePipes(int numberOfPipes);
 void UnBind(int pipesCount);
 
 int IsInputPipeIndex(int index);
@@ -54,7 +54,7 @@ int main(int argc, const char * argv[])
 		
 		numberOfGames = 1; //atoi(argv[1]);
 		numberOfPipes = numberOfGames * 2;
-		fds = CreatePipes(numberOfPipes);
+		CreatePipes(numberOfPipes);
 		
 		while (true)
 		{
@@ -69,7 +69,7 @@ int main(int argc, const char * argv[])
 						assert(IsInputPipeIndex(i));
 						char * outputFileName = GetOutputFileName(i);
 					
-						ProcessFileContentAsync(fds[i].fd, outputFileName);
+						ProcessFileContentAsync(fds[i].fd, fds[i + 1].fd);
 					
 						free(outputFileName);
 					}
@@ -101,9 +101,9 @@ int IsInputPipeIndex(int index)
 	return index % 2 == 0;
 }
 
-void ProcessFileContentAsync(int fd, char * outputFileName)
+void ProcessFileContentAsync(int fd, int outFd)
 {
-	ProcessFile(fd, outputFileName);
+	ProcessFile(fd, outFd);
 		//
 		//
 		//	pid_t nPid = fork();
@@ -115,7 +115,7 @@ void ProcessFileContentAsync(int fd, char * outputFileName)
 		//	}
 }
 
-void ProcessFile(int fd, char * outputFileName)
+void ProcessFile(int fd, int outFd)
 {
 	Table *table = ReadTableFromFile(fd);
 	
@@ -139,18 +139,14 @@ void ProcessFile(int fd, char * outputFileName)
 		
 		int playerId = 0; //GetPlayerId();
 		
-		FILE *output =  fopen(outputFileName, "w");
 		
-		if (output)
-		{
-				//TODO: ready to play
-			
-			TPoint move = RandomMoveStrategy_Play(emptyCellVector);
-			
-			fprintf(output, "[%d, %d, %d]", playerId, move.X + 1, move.Y + 1);
-			
-		}
+		TPoint move = RandomMoveStrategy_Play(emptyCellVector);
 		
+		char buffer[100];
+		int len = sprintf(buffer, "[%d, %d, %d]\n", playerId, move.X + 1, move.Y + 1);
+		
+		write(outFd, buffer, len);
+			
 		free(emptyCellVector);
 		free(table);
 		
@@ -180,9 +176,9 @@ void UnBind(int pipesCount)
 
 
 
-struct pollfd * CreatePipes(int numberOfPipes)
+void CreatePipes(int numberOfPipes)
 {
-	struct pollfd * result = malloc(sizeof(struct pollfd) * numberOfPipes);
+	fds = malloc(sizeof(struct pollfd) * numberOfPipes);
 	
 	for (int i = 0; i < numberOfPipes; i += 2)
 	{
@@ -190,21 +186,19 @@ struct pollfd * CreatePipes(int numberOfPipes)
 		
 		mkfifo(input, 0600);
 		
-		result[i].fd = open(input, O_RDWR);
-		result[i].events = POLLIN;
-		result[i].revents = 0;
+		fds[i].fd = open(input, O_RDWR);
+		fds[i].events = POLLIN;
+		fds[i].revents = 0;
 		
 		char * output = GetOutputFileName(i);
 		
 		mkfifo(output, 0600);
 		
-		result[i + 1].fd = open(output, O_RDWR);
+		fds[i + 1].fd = open(output, O_RDWR);
 		
 		free(input);
 		free(output);
 	}
-	
-	return result;
 }
 
 char * GetOutputFileName(int index)
