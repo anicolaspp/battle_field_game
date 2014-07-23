@@ -21,11 +21,8 @@ typedef struct _Vector
 	
 } Vector;
 
-
-void Add(Vector vector, TPoint value);
-
 Vector *GetVector(int size);
 
-void DisposeVector(Vector v);
+void DisposeVector(Vector * vector);
 
 #endif

@@ -37,6 +37,6 @@ void PrintTable(Table *table, FILE *outputFile);
 //
 //	Releases allocated resourses
 //
-void Dispose(Table *table);
+void DisposeTable(Table *table);
 
 #endif

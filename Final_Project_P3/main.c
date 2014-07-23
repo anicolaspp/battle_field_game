@@ -129,11 +129,8 @@ void ProcessFile(int fd, int outFd, int gameId)
 		
 		write(outFd, buffer, len);
 		
-		free(emptyCellVector->values);
-		free(emptyCellVector);
-		
-		free(table->grid);
-		free(table);
+		DisposeVector(emptyCellVector);
+		DisposeTable(table);
 	}
 }
 

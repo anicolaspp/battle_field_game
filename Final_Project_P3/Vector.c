@@ -21,10 +21,11 @@ Vector *GetVector(int size)
 	return v;
 }
 
-void DesposeVector(Vector v)
+void DisposeVector(Vector * vector)
 {
-	if (v.values != NULL)
+	if (vector != NULL)
 	{
-		free(v.values);
+		free(vector->values);
+		free(vector);
 	}
 }

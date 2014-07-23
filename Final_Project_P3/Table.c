@@ -74,14 +74,12 @@ TPoint InvertIndex(int index, Table *table)
 	return point;
 }
 
-void Dispose(Table * table)
+void DisposeTable(Table * table)
 {
-	if (table->dimensions > 0)
+	if (table != NULL)
 	{
 		free(table->grid);
+		free(table);
 	}
-	
-		//memset(table, 0, sizeof(table));
-	free(table);
 }
 
