@@ -10,16 +10,19 @@
 
 #include "WinnerMoveStrategy.h"
 
-int Flip(Table * table, TPoint move)
+int Flip(Table * table, TPoint move, int playerId)
 {
+		//TODO: flip the table using the playerId and return how many I win
+		//TODO: I don't need to "flip" the table, but only count how many are fliped
+	
 	return 0;
 }
 
 
-TPoint WinnerMoveStrategy_Play(Table * table)
+TPoint WinnerMoveStrategy_Play(Table * table, int playerId)
 {
 	Table * mTable = CopyTable(table);
-	Vector * emptyCells = GetFreePositions(*mTable);
+	Vector * emptyCells = GetFreePositions(*table);
 	
 	TPoint p;
 	int max = 0;
@@ -28,7 +31,7 @@ TPoint WinnerMoveStrategy_Play(Table * table)
 	{
 		TPoint move = emptyCells->values[i];
 		
-		int count = Flip(mTable, move);
+		int count = Flip(mTable, move, playerId);
 		
 		if (count > max)
 		{

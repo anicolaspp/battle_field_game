@@ -12,6 +12,6 @@
 #include "Vector.h"
 #include "Table.h"
 
-TPoint WinnerMoveStrategy_Play(Table * table);
+TPoint WinnerMoveStrategy_Play(Table * table, int playerId);
 
 #endif
