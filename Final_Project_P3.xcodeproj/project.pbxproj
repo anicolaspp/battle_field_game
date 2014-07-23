@@ -15,6 +15,7 @@
 		08D56BBC194A56A200C3A72C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08D56BBB194A56A200C3A72C /* main.c */; };
 		08D56BBE194A56A200C3A72C /* Final_Project_P3.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */; };
 		08D56BC6194A575000C3A72C /* Parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 08D56BC5194A575000C3A72C /* Parser.c */; };
+		08DC29CE197F6A9900DE6E19 /* WinnerMoveStrategy.c in Sources */ = {isa = PBXBuildFile; fileRef = 08DC29CD197F6A9900DE6E19 /* WinnerMoveStrategy.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,6 +49,8 @@
 		08D56BBD194A56A200C3A72C /* Final_Project_P3.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Final_Project_P3.1; sourceTree = "<group>"; };
 		08D56BC4194A56F500C3A72C /* Parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
 		08D56BC5194A575000C3A72C /* Parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Parser.c; sourceTree = "<group>"; };
+		08DC29CC197F6A0700DE6E19 /* WinnerMoveStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WinnerMoveStrategy.h; sourceTree = "<group>"; };
+		08DC29CD197F6A9900DE6E19 /* WinnerMoveStrategy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = WinnerMoveStrategy.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +99,8 @@
 				0842649F194B87F50049858B /* Vector.c */,
 				0842649E194B84C50049858B /* Vector.h */,
 				08C629071957C04400A6540D /* Point.h */,
+				08DC29CC197F6A0700DE6E19 /* WinnerMoveStrategy.h */,
+				08DC29CD197F6A9900DE6E19 /* WinnerMoveStrategy.c */,
 			);
 			path = Final_Project_P3;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			files = (
 				0842649D194B4EC40049858B /* Table.c in Sources */,
 				0842649A194B292D0049858B /* FileReader.c in Sources */,
+				08DC29CE197F6A9900DE6E19 /* WinnerMoveStrategy.c in Sources */,
 				084264A7194B8FB80049858B /* RandomMoveStrategy.c in Sources */,
 				08D56BC6194A575000C3A72C /* Parser.c in Sources */,
 				084264A5194B8F370049858B /* SingleMoveStrategy.c in Sources */,

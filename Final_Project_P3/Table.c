@@ -83,3 +83,37 @@ void DisposeTable(Table * table)
 	}
 }
 
+int * CopyGrid(int * grid, int n)
+{
+	int * result = calloc(n, sizeof(int));
+	
+	for (int i = 0; i < n; i++)
+	{
+		result[i] = grid[i];
+	}
+	
+	return result;
+}
+
+Table * GetTable(int dimensions, int numberOfPlayers, int * grid)
+{
+	Table * result = calloc(1, sizeof(Table));
+	
+	result->dimensions = dimensions;
+	result->numberOfPlayers = numberOfPlayers;
+	result->grid = CopyGrid(grid, dimensions * dimensions);
+	
+	return result;
+}
+
+Table * CopyTable(Table * table)
+{
+	Table * result = GetTable(table->dimensions, table->numberOfPlayers, table->grid);
+	
+	return result;
+}
+
+
+
+
+

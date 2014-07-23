@@ -36,11 +36,7 @@ Table *ReadTableFromFile(int fd)
 	
 	free(dataString);
 	
-	table = calloc(1, sizeof(Table));//(sizeof(Table));
-
-	table->grid = grid;
-	table->dimensions = GetDimensions();
-	table->numberOfPlayers = GetNumberOfPlayers();
+	table = GetTable(GetDimensions(), GetNumberOfPlayers(), grid);  // calloc(1, sizeof(Table));//(sizeof(Table));
 	
 	return table;
 }

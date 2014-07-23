@@ -27,6 +27,10 @@ Vector *GetFreePositions(Table table);
 
 TPoint InvertIndex(int index, Table *table);
 
+Table * CopyTable(Table * table);
+
+Table * GetTable(int dimenssions, int numberOfPlayers, int * grid);
+
 
 //
 // Print to the file decriptor.
