@@ -47,6 +47,7 @@ int IsInputPipeIndex(int index);
 void PrintStats(Table *table, Vector *emptyCellVector);
 void ProcessInputFileDecriptors(struct pollfd * fds);
 void InitPlayerIds(int numberOfGames);
+int GetPlayerId(int gameId, Table * table);
 
 
 int main(int argc, const char * argv[])
