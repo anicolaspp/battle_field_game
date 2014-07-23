@@ -18,8 +18,6 @@
 #include "FileReader.h"
 #include "Table.h"
 #include "Parser.h"
-#include "SingleMoveStrategy.h"
-#include "RandomMoveStrategy.h"
 #include "WinnerMoveStrategy.h"
 #include "Vector.h"
 
