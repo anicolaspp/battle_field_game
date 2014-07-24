@@ -101,11 +101,18 @@ int main(int argc, const char * argv[])
 {
 		//if (argc == 2)
 	{
-		//signal(SIGTERM, sigterm_handler);
+		pid = getpid();
+		printf("%d\n", pid);
+		
+		numberOfGames = 1; //atoi(argv[1]);
+		numberOfPipes = numberOfGames * 2;
+		
+		CreatePipes(numberOfPipes);
+		InitPlayerIds(numberOfGames);
         
         
         
-        pthread_t thread;
+        pthread_t signalThread;
         sigset_t set;
         
         sigemptyset(&set);
@@ -113,30 +120,17 @@ int main(int argc, const char * argv[])
         
         pthread_sigmask(SIG_BLOCK, &set, NULL);
         
-        pthread_create(&thread, NULL, &sig_thread, &set);
-        
-        
-        
-		
-		pid = getpid();
-		printf("%d\n", pid);
-		
-		numberOfGames = 1; //atoi(argv[1]);
-		numberOfPipes = numberOfGames * 2;
-
-		CreatePipes(numberOfPipes);
-		InitPlayerIds(numberOfGames);
-        
-        pthread_t mainPThread;
-        
+        pthread_create(&signalThread, NULL, &sig_thread, &set);
+     
+		pthread_t mainPThread;
         pthread_create(&mainPThread, NULL, &ProcessInput, NULL);
         
-        pthread_join(thread, NULL);
+        pthread_join(signalThread, NULL);
         
 		threadCancelled = 1;
-        
-        printf("Terminated\n");
-        
+		
+		pthread_join(mainPThread, NULL);
+		
         UnBind(numberOfPipes);
 		
 	}
@@ -162,8 +156,6 @@ void ProcessInputFileDecriptors(struct pollfd * fds)
             ProcessFile(args);
 		}
 	}
-    
-    pthread_exit(pthread_self());
 }
 
 void InitPlayerIds(int numberOfGames)
@@ -178,14 +170,9 @@ void InitPlayerIds(int numberOfGames)
 
 void sigterm_handler()
 {
-    printf("Unbinding\n");
-    
-	UnBind(numberOfPipes);
+   	UnBind(numberOfPipes);
 	
 	free(playerIds);
-
-	exit(EXIT_SUCCESS);
-    //pthread_exit(NULL);
 }
 
 void * ProcessFile(ProcessFileArgs * args)//int fd, int outFd, int gameId)
@@ -285,9 +272,7 @@ void CreatePipes(int numberOfPipes)
 
 void UnBind(int pipesCount)
 {
-    printf("Unbinding\n");
-    
-	for (int i = 0; i < pipesCount; i += 2)
+  	for (int i = 0; i < pipesCount; i += 2)
 	{
 		char * input = GetInputFileName(i);
 		char * output = GetOutputFileName(i);
