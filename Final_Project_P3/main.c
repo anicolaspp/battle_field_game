@@ -32,8 +32,7 @@ struct pollfd * fds;
 
 int * playerIds;
 
-pthread_t * threads;
-int numberOfThreads;
+int threadCancelled = 0;
 
 
 typedef struct
@@ -89,18 +88,16 @@ void ProcessInput()
 	
     while (true)
     {
-        int ret = poll(fds, numberOfPipes, -1);
+        int ret = poll(fds, numberOfPipes, 5);
         
         if (ret > 0)
         {
-            pthread_t tid;
-            
-            pthread_create(&tid, NULL, &ProcessInputFileDecriptors, fds);
-            
-            ret = 0;
-            
-            //ProcessInputFileDecriptors(fds);
+			ProcessInputFileDecriptors(fds);
         }
+		else if (threadCancelled == 1)
+		{
+			pthread_exit(NULL);
+		}
     }
 }
 
@@ -152,27 +149,14 @@ void ProcessInputFileDecriptors(struct pollfd * fds)
 		{
 			assert(IsInputPipeIndex(i));
 			
-				//TODO: create thread to process request
-			
-//			pthread_t threadId;
-//			
 			ProcessFileArgs * args = calloc(1, sizeof(ProcessFileArgs));
 			args->inputFd = fds[i].fd;
 			args->outputFd = fds[i + 1].fd;
 			args->gameId = i;
 			
-//
-//			pthread_create(&threadId, NULL, &ProcessFile, args);
-            
-            
-           
             ProcessFile(args);
-			
-            //ProcessFile(fds[i].fd, fds[i + 1].fd, i);
 		}
 	}
-    
-    pthread_exit(pthread_self());
 }
 
 void InitPlayerIds(int numberOfGames)
@@ -187,14 +171,9 @@ void InitPlayerIds(int numberOfGames)
 
 void sigterm_handler()
 {
-    printf("Unbinding\n");
-    
-	UnBind(numberOfPipes);
+   	UnBind(numberOfPipes);
 	
 	free(playerIds);
-
-	exit(EXIT_SUCCESS);
-    //pthread_exit(NULL);
 }
 
 void * ProcessFile(ProcessFileArgs * args)//int fd, int outFd, int gameId)
@@ -294,9 +273,7 @@ void CreatePipes(int numberOfPipes)
 
 void UnBind(int pipesCount)
 {
-    printf("Unbinding\n");
-    
-	for (int i = 0; i < pipesCount; i += 2)
+  	for (int i = 0; i < pipesCount; i += 2)
 	{
 		char * input = GetInputFileName(i);
 		char * output = GetOutputFileName(i);
