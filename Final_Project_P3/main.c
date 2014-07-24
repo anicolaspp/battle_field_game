@@ -19,8 +19,7 @@
 #include "FileReader.h"
 #include "Table.h"
 #include "Parser.h"
-#include "SingleMoveStrategy.h"
-#include "RandomMoveStrategy.h"
+#include "WinnerMoveStrategy.h"
 #include "Vector.h"
 
 #define true 1
@@ -154,7 +153,7 @@ void * ProcessFile(ProcessFileArgs * args)//int fd, int outFd, int gameId)
 		
 		int playerId = GetPlayerId(args->gameId, table);
 		
-		TPoint move = RandomMoveStrategy_Play(emptyCellVector);
+		TPoint move = WinnerMoveStrategy_Play(table, emptyCellVector, playerId); //RandomMoveStrategy_Play(emptyCellVector);
 		
 		char buffer[100];
 		int len = sprintf(buffer, "[%d, %d, %d]\n", playerId, move.X + 1, move.Y + 1);

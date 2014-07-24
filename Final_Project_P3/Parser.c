@@ -29,6 +29,7 @@ int *grid;
 int ReadDimensions();
 char *GetNextLine(char *);
 void PrintGrid(int **);
+int GetNumbersInLine(char *line, int *numbers);
 
 Vector *GetXVector()
 {
