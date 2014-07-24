@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "FileReader.h"
 #include "Table.h"
@@ -32,10 +33,24 @@ struct pollfd * fds;
 
 int * playerIds;
 
+pthread_t * threads;
+int numberOfThreads;
+
+
+typedef struct
+{
+	int inputFd;
+	int outputFd;
+	int gameId;
+} ProcessFileArgs;
+
+
+
+
 void sigterm_handler(int signal);
 
 void ProcessFileContentAsync(int fd, int outFd, int gameId);
-void ProcessFile(int fd, int outFd, int gameId);
+void * ProcessFile(ProcessFileArgs * args);
 
 char * GetOutputFileName(int index);
 char * GetInputFileName(int index);
@@ -52,14 +67,14 @@ int GetPlayerId(int gameId, Table * table);
 
 int main(int argc, const char * argv[])
 {
-	if (argc == 2)
+		//if (argc == 2)
 	{
 		signal(SIGTERM, sigterm_handler);
 		
 		pid = getpid();
 		printf("%d\n", pid);
 		
-		numberOfGames = atoi(argv[1]);
+		numberOfGames = 1; //atoi(argv[1]);
 		numberOfPipes = numberOfGames * 2;
 
 		CreatePipes(numberOfPipes);
@@ -79,6 +94,8 @@ int main(int argc, const char * argv[])
     return 0;	
 }
 
+
+
 void ProcessInputFileDecriptors(struct pollfd * fds)
 {
 	for (int i = 0; i < numberOfPipes; i++)
@@ -87,7 +104,19 @@ void ProcessInputFileDecriptors(struct pollfd * fds)
 		{
 			assert(IsInputPipeIndex(i));
 			
-			ProcessFile(fds[i].fd, fds[i + 1].fd, i);
+				//TODO: create thread to process request
+			
+			pthread_t threadId;
+			
+			ProcessFileArgs * args = calloc(1, sizeof(ProcessFileArgs));
+			args->inputFd = fds[i].fd;
+			args->outputFd = fds[i + 1].fd;
+			args->gameId = i;
+			
+			
+			pthread_create(&threadId, NULL, &ProcessFile, args);
+			
+				//ProcessFile(fds[i].fd, fds[i + 1].fd, i);
 		}
 	}
 }
@@ -111,9 +140,11 @@ void sigterm_handler()
 	exit(EXIT_SUCCESS);
 }
 
-void ProcessFile(int fd, int outFd, int gameId)
+void * ProcessFile(ProcessFileArgs * args)//int fd, int outFd, int gameId)
 {
-	Table *table = ReadTableFromFile(fd);
+	printf("hello %d %d %d\n", args->inputFd, args->outputFd, args->gameId);
+	
+	Table *table = ReadTableFromFile(args->inputFd);
 	
 	if (table != NULL)
 	{
@@ -121,18 +152,20 @@ void ProcessFile(int fd, int outFd, int gameId)
 		
 		PrintStats(table, emptyCellVector);
 		
-		int playerId = GetPlayerId(gameId, table);
+		int playerId = GetPlayerId(args->gameId, table);
 		
 		TPoint move = RandomMoveStrategy_Play(emptyCellVector);
 		
 		char buffer[100];
 		int len = sprintf(buffer, "[%d, %d, %d]\n", playerId, move.X + 1, move.Y + 1);
 		
-		write(outFd, buffer, len);
+		write(args->outputFd, buffer, len);
 		
 		DisposeVector(emptyCellVector);
 		DisposeTable(table);
 	}
+	
+	return NULL;
 }
 
 void PrintStats(Table *table, Vector *emptyCellVector)
