@@ -64,11 +64,63 @@ void InitPlayerIds(int numberOfGames);
 int GetPlayerId(int gameId, Table * table);
 
 
+void sig_thread(void * args)
+{
+    sigset_t * set = args;
+    int s, sig;
+    
+    for (;;)
+    {
+        s = sigwait(set, &sig);
+    
+        if (sig == SIGTERM)
+        {
+            pthread_exit(NULL);
+        }
+    }
+    
+}
+
+void ProcessInput()
+{
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    while (true)
+    {
+        int ret = poll(fds, numberOfPipes, -1);
+        
+        if (ret > 0)
+        {
+            pthread_t tid;
+            
+            pthread_create(&tid, NULL, &ProcessInputFileDecriptors, fds);
+            
+            ret = 0;
+            
+            //ProcessInputFileDecriptors(fds);
+        }
+    }
+}
+
 int main(int argc, const char * argv[])
 {
 		//if (argc == 2)
 	{
-		signal(SIGTERM, sigterm_handler);
+		//signal(SIGTERM, sigterm_handler);
+        
+        
+        
+        pthread_t thread;
+        sigset_t set;
+        
+        sigemptyset(&set);
+        sigaddset(&set, SIGTERM);
+        
+        pthread_sigmask(SIG_BLOCK, &set, NULL);
+        
+        pthread_create(&thread, NULL, &sig_thread, &set);
+        
+        
+        
 		
 		pid = getpid();
 		printf("%d\n", pid);
@@ -78,22 +130,19 @@ int main(int argc, const char * argv[])
 
 		CreatePipes(numberOfPipes);
 		InitPlayerIds(numberOfGames);
+        
+        pthread_t mainPThread;
+        
+        pthread_create(&mainPThread, NULL, &ProcessInput, NULL);
+        
+        pthread_join(thread, NULL);
+        
+        pthread_cancel(mainPThread);
+        
+        printf("Terminated\n");
+        
+        UnBind(numberOfPipes);
 		
-		while (true)
-		{
-			int ret = poll(fds, numberOfPipes, -1);
-			
-			if (ret > 0)
-			{
-                pthread_t tid;
-                
-                pthread_create(&tid, NULL, &ProcessInputFileDecriptors, fds);
-                
-                ret = 0;
-                
-				//ProcessInputFileDecriptors(fds);
-			}
-		}
 	}
 	
     return 0;	
@@ -251,6 +300,8 @@ void CreatePipes(int numberOfPipes)
 
 void UnBind(int pipesCount)
 {
+    printf("Unbinding\n");
+    
 	for (int i = 0; i < pipesCount; i += 2)
 	{
 		char * input = GetInputFileName(i);
