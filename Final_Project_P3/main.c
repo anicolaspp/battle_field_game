@@ -32,8 +32,7 @@ struct pollfd * fds;
 
 int * playerIds;
 
-pthread_t * threads;
-int numberOfThreads;
+int threadCancelled = 0;
 
 
 typedef struct
@@ -83,21 +82,18 @@ void sig_thread(void * args)
 
 void ProcessInput()
 {
-    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
     while (true)
     {
-        int ret = poll(fds, numberOfPipes, -1);
+        int ret = poll(fds, numberOfPipes, 5);
         
         if (ret > 0)
         {
-            pthread_t tid;
-            
-            pthread_create(&tid, NULL, &ProcessInputFileDecriptors, fds);
-            
-            ret = 0;
-            
-            //ProcessInputFileDecriptors(fds);
+			ProcessInputFileDecriptors(fds);
         }
+		else if (threadCancelled == 1)
+		{
+			pthread_exit(NULL);
+		}
     }
 }
 
@@ -137,7 +133,7 @@ int main(int argc, const char * argv[])
         
         pthread_join(thread, NULL);
         
-        pthread_cancel(mainPThread);
+		threadCancelled = 1;
         
         printf("Terminated\n");
         
@@ -158,23 +154,12 @@ void ProcessInputFileDecriptors(struct pollfd * fds)
 		{
 			assert(IsInputPipeIndex(i));
 			
-				//TODO: create thread to process request
-			
-//			pthread_t threadId;
-//			
 			ProcessFileArgs * args = calloc(1, sizeof(ProcessFileArgs));
 			args->inputFd = fds[i].fd;
 			args->outputFd = fds[i + 1].fd;
 			args->gameId = i;
 			
-//
-//			pthread_create(&threadId, NULL, &ProcessFile, args);
-            
-            
-           
             ProcessFile(args);
-			
-            //ProcessFile(fds[i].fd, fds[i + 1].fd, i);
 		}
 	}
     
