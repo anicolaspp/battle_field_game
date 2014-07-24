@@ -72,6 +72,8 @@ void sig_thread(void * args)
     for (;;)
     {
         s = sigwait(set, &sig);
+		
+		printf("%d\n", sig);
     
         if (sig == SIGTERM)
         {
@@ -84,6 +86,7 @@ void sig_thread(void * args)
 void ProcessInput()
 {
     pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+	
     while (true)
     {
         int ret = poll(fds, numberOfPipes, -1);
@@ -103,25 +106,17 @@ void ProcessInput()
 
 int main(int argc, const char * argv[])
 {
-		//if (argc == 2)
+	if (argc == 2)
 	{
-		//signal(SIGTERM, sigterm_handler);
-        
-        
-        
-        pthread_t thread;
+	    pthread_t thread;
         sigset_t set;
         
         sigemptyset(&set);
         sigaddset(&set, SIGTERM);
         
         pthread_sigmask(SIG_BLOCK, &set, NULL);
-        
         pthread_create(&thread, NULL, &sig_thread, &set);
         
-        
-        
-		
 		pid = getpid();
 		printf("%d\n", pid);
 		
@@ -134,15 +129,14 @@ int main(int argc, const char * argv[])
         pthread_t mainPThread;
         
         pthread_create(&mainPThread, NULL, &ProcessInput, NULL);
-        
+
         pthread_join(thread, NULL);
         
         pthread_cancel(mainPThread);
         
-        printf("Terminated\n");
-        
         UnBind(numberOfPipes);
 		
+		pthread_exit(NULL);
 	}
 	
     return 0;	
