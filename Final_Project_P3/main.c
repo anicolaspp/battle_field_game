@@ -85,7 +85,13 @@ int main(int argc, const char * argv[])
 			
 			if (ret > 0)
 			{
-				ProcessInputFileDecriptors(fds);
+                pthread_t tid;
+                
+                pthread_create(&tid, NULL, &ProcessInputFileDecriptors, fds);
+                
+                ret = 0;
+                
+				//ProcessInputFileDecriptors(fds);
 			}
 		}
 	}
@@ -105,19 +111,25 @@ void ProcessInputFileDecriptors(struct pollfd * fds)
 			
 				//TODO: create thread to process request
 			
-			pthread_t threadId;
-			
+//			pthread_t threadId;
+//			
 			ProcessFileArgs * args = calloc(1, sizeof(ProcessFileArgs));
 			args->inputFd = fds[i].fd;
 			args->outputFd = fds[i + 1].fd;
 			args->gameId = i;
 			
+//
+//			pthread_create(&threadId, NULL, &ProcessFile, args);
+            
+            
+           
+            ProcessFile(args);
 			
-			pthread_create(&threadId, NULL, &ProcessFile, args);
-			
-				//ProcessFile(fds[i].fd, fds[i + 1].fd, i);
+            //ProcessFile(fds[i].fd, fds[i + 1].fd, i);
 		}
 	}
+    
+    pthread_exit(pthread_self());
 }
 
 void InitPlayerIds(int numberOfGames)
@@ -132,17 +144,18 @@ void InitPlayerIds(int numberOfGames)
 
 void sigterm_handler()
 {
+    printf("Unbinding\n");
+    
 	UnBind(numberOfPipes);
 	
 	free(playerIds);
 
 	exit(EXIT_SUCCESS);
+    //pthread_exit(NULL);
 }
 
 void * ProcessFile(ProcessFileArgs * args)//int fd, int outFd, int gameId)
 {
-	printf("hello %d %d %d\n", args->inputFd, args->outputFd, args->gameId);
-	
 	Table *table = ReadTableFromFile(args->inputFd);
 	
 	if (table != NULL)

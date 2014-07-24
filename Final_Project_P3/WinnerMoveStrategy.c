@@ -17,7 +17,7 @@ int Flip(Table * table, TPoint move, int playerId)
 		//TODO: flip the table using the playerId and return how many I win
 		//TODO: I don't need to "flip" the table, but only count how many are fliped
     
-    printf("Dimensions: %d\n", table->dimensions);
+  //  printf("Dimensions: %d\n", table->dimensions);
     
     int sum = 0;
     
@@ -65,11 +65,11 @@ TPoint WinnerMoveStrategy_Play(Table * table, Vector * emptyCells, int playerId)
 	TPoint p;
 	int max = 0;
     
-    
-    for (int i = 0; i < emptyCells->count; i++)
-    {
-        printf("[%d, %d] ", emptyCells->values[i].X, emptyCells->values[i].Y);
-    }
+//    
+//    for (int i = 0; i < emptyCells->count; i++)
+//    {
+//        printf("[%d, %d] ", emptyCells->values[i].X, emptyCells->values[i].Y);
+//    }
     
     printf("\n");
     
